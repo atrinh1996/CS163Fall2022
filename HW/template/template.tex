@@ -1,0 +1,130 @@
+% -*- LaTeX -*- %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%
+% Template for scribing COMP163 - Computational Geometry 
+%
+% Spring, 2004
+%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%**start of header
+
+\documentclass [12pt]{article}
+\usepackage{epsfig}
+
+
+\newtheorem{theorem}{Theorem}[section]
+\newtheorem{definition}[theorem]{Definition}
+\newtheorem{claim}[theorem]{Claim}
+\newtheorem{lemma}[theorem]{Lemma}
+\newtheorem{proof}[theorem]{Proof}
+
+\newlength{\toppush}
+\setlength{\toppush}{2\headheight}
+\addtolength{\toppush}{\headsep}
+
+\usepackage{hyperref}
+\hypersetup{
+    colorlinks=true,
+    linkcolor=blue, % was previously black
+    filecolor=magenta,
+    urlcolor=blue,
+    pdftitle={Template}
+}
+\urlstyle{same}
+
+%\doheading{2}{title}{Last Revised: January, 2004}
+%\htitle{title}
+
+\def\subjnum{Comp 163}
+\def\subjname{Computational Geometry}
+
+\def\doheading#1#2#3{\vfill\eject\vspace*{-\toppush}%
+  \vbox{\hbox to\textwidth{{\bf} \subjnum: \subjname \hfil Professor
+Diane Souvaine}%
+    \hbox to\textwidth{{\bf} Tufts University, Spring 2004 \hfil#3\strut}%
+    \hrule}}
+
+\newcommand{\htitle}[1]{\vspace*{3.25ex plus 1ex minus .2ex}%
+\begin{center}
+{\large\bf #1}
+\end{center}} 
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{document}
+\doheading{2}{title}{Scribe: Eynat Rafalin}
+\htitle{How to use LATEX}
+\bigskip 
+\bigskip 
+%%%%%%%%%% begin text after this line %%%%%%%%%%%%%%
+
+\section{Introduction}
+\label{sec:intro}
+LATEX is a system for typesetting documents that is extremely popular in the scientific and academic community.
+One of the best methods to learn LATEX is by examining an existing sample file (like this one) and modifying it. Another great resource is~\cite{lampo94} (this book was used as a resource for preparing this document). The web is also a great source.
+
+LATEX input is a file containing the document's text together with commands that describe the document's structure. Its output is a file of typesetting instructions. Another program must be run to convert these instructions into printed output (see section~\ref{sec:output} for information about how to convert your tex file to a printable document).  
+
+\section{General}
+\begin{itemize}
+\item Your text should appear only in the {\it document} part of the file (between {\it begin\{document\}} and {\it end\{document\}})\\
+\item Simple paragraphs - type whatever you want. LATEX ignores the way the input is formatted, paying attention only to end-of-word, end-of-sentence, end-of-paragraph.\\
+  \begin{enumerate}
+  \item A new word is separated by space.\\
+  \item A new paragraph is separated by two backslashes or by more than one enter commands.\\
+  \end{enumerate}
+\end{itemize}
+
+\subsection{Fonts}
+Regular, 
+{\bf bold face, }
+{\it italic..}
+
+\subsection{Mathematical symbols and formulas}
+A formula ($y=\frac{2x+4}{x^2}$), mathematical symbols ($\leq$, $\Rightarrow$) or letters ($\Omega$, $\omega$, $\infty$) appear in the mathematical environment between \$..\$. For detailed description of the available mathematical symbols see any of the sources mentioned in section ~\ref{sec:intro}. Note that lower case appears after \_ ($x_{i}+y_{i}=z_{i}$), upper case appear after \^~ ($n^{2x+3}$)
+
+\section{Figures}
+\subsection{Creating figures}
+Figures can be created using {\bf xfig} (/local/bin/xfig). Draw the figure and export it to a {\it .eps} file. Note that when using xfig a drawing in the upper right corner indicates the available command for each of the mouse buttons. Here is an online converter to make .esp \url{https://cloudconvert.com/png-to-eps}. 
+
+\subsection{Incorporating the figure in the LATEX document}
+See figure~\ref{fig:ex}.
+
+\begin{figure}
+\centerline{\epsfig{file=example.eps,height=1.5in}}
+\caption{Example}
+\label{fig:ex}
+\end{figure}
+
+\section{More hints about LATEX}
+Verbatim is a useful tool to write code segments
+\begin{verbatim}
+like  this
+  or  
+  this 
+\end{verbatim}
+If indentation appear and do not appear where they are needed try adding {\it noindent} or {\it indent}.  \\
+
+\noindent Theorems can be inserted between begin\{theorem\} to end\{theorem\} as follows:
+\begin{theorem}
+This is a theorem.
+\end{theorem}
+Definitions, lemmas claims and proofs can be used similarly.
+
+\section{Converting the LATEX file into a document}
+\label{sec:output}
+\begin{enumerate}
+\item Edit the tex file with a text editor (xemacs)\\
+\item Convert the file to a .dvi file by typing {\it latex filename.tex}.
+You can view the dvi file using {\it xdvi filename.dvi}. This stage is the longest and most painful one (especially for beginners). LATEX outputs error messages that indicated the line number with the error and the type of the error. It is useful to use these messages to debug the file.\\
+\item Convert the dvi file to a ps file {\it dvips -o filename.ps filename.dvi}. You can view the ps file using {\it gv filename.ps} (ghostview).\\
+\item If needed, convert the ps file to a pdf file {\it ps2pdf filename.ps filename.pdf}.\\
+\end{enumerate}
+
+\begin{thebibliography}{1}
+\bibitem[1]{lampo94}Leslie Lamport, \emph{Latex User's Guide and Reference Manual}, 2nd edition, Addison Wesley, 1994.
+
+\end{thebibliography}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\end{document}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
