@@ -1,0 +1,236 @@
+% -*- LaTeX -*- %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%
+% Template for scribing COMP163 - Computational Geometry 
+%
+% Spring, 2004
+%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%**start of header
+
+\documentclass [12pt]{article}
+\usepackage{epsfig}
+\usepackage{enumitem}
+\usepackage{amsmath}
+\usepackage[color, leftbars]{changebar}
+
+
+
+\newtheorem{theorem}{Theorem}[section]
+\newtheorem{definition}[theorem]{Definition}
+\newtheorem{claim}[theorem]{Claim}
+\newtheorem{lemma}[theorem]{Lemma}
+\newtheorem{proof}[theorem]{Proof}
+
+\newlength{\toppush}
+\setlength{\toppush}{2\headheight}
+\addtolength{\toppush}{\headsep}
+
+\usepackage{hyperref}
+\hypersetup{
+    colorlinks=true,
+    linkcolor=blue, % was previously black
+    filecolor=magenta,
+    urlcolor=blue,
+    pdftitle={Template}
+}
+\urlstyle{same}
+
+%\doheading{2}{title}{Last Revised: January, 2004}
+%\htitle{title}
+
+\def\subjnum{Comp 163}
+\def\subjname{Computational Geometry}
+
+\def\doheading#1#2#3{\vfill\eject\vspace*{-\toppush}%
+  \vbox{\hbox to\textwidth{{\bf} \subjnum: \subjname \hfil Amy Bui}%
+    \hbox to\textwidth{{\bf} Tufts University, Fall 2022 \hfil#3\strut}%
+    \hrule}}
+
+\newcommand{\htitle}[1]{\vspace*{3.25ex plus 1ex minus .2ex}%
+\begin{center}
+{\large\bf #1}
+\end{center}} 
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{document}
+\doheading{2}{title}{HW 1}
+\htitle{Homework 1}
+% \bigskip 
+% \bigskip 
+%%%%%%%%%% begin text after this line %%%%%%%%%%%%%%
+
+    %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+    \section{Left Turn and Convexity}
+    \label{sec:one}
+
+        \begin{enumerate}[label=(\alph*)]
+            \item Derive and verify that, for the given points $A = (x_a, y_a)$, $B = (x_b, y_b)$, and $C = (x_c, y_c)$ (in this order), and determinant
+            $$
+            D = \begin{vmatrix}
+                x_a & y_a & 1 \\
+                x_b & y_b & 1 \\
+                x_c & y_c & 1 
+                \end{vmatrix} , 
+            $$
+
+            $A$, $B$, and $C$ appear in counterclockwise (ccw) order on the boundary of $\Delta ABC$ if and only if $D$ is positive (i.e. $A$, $B$, $C$ form a left turn if $D > 0$).
+
+            The determinant can be calculated by:
+            \begin{align}
+                D &= x_a \begin{vmatrix}
+                    y_b & 1 \\
+                    y_c & 1 
+                \end{vmatrix} 
+                - y_a \begin{vmatrix}
+                    x_b & 1 \\
+                    x_c & 1 
+                \end{vmatrix} 
+                + 1 \begin{vmatrix}
+                    x_b & y_b \\
+                    x_c & y_c
+                \end{vmatrix} \\
+                &= x_a (y_b - y_c) - y_a (x_b - x_c) + (x_b y_c - y_b x_c) \\
+                &= (x_a y_b - x_a y_c) + (y_a x_c - y_a x_b) + (x_b y_c - y_b x_c)
+            \end{align}
+
+            Notice that the result on line (3) is the result of the cross product of the two vectors $\overrightarrow{AB}$ and $\overrightarrow{BC}$, i.e. $\overrightarrow{AB} \times \overrightarrow{BC}$. I show the determinant method of finding the cross product:
+            \begin{align*}
+                \overrightarrow{AB} = \langle x_b - x_a, y_b - y_a, 0 \rangle \\ 
+                \overrightarrow{BC} = \langle x_c - x_b, y_c - y_b, 0 \rangle \\ 
+                \overrightarrow{AB} \times \overrightarrow{BC} &= 
+                \begin{vmatrix}
+                    i & j & k \\
+                    x_b - x_a & y_b - y_a & 0 \\ 
+                    x_c - x_b & y_c - y_b & 0
+                \end{vmatrix} \\
+                &= \big[(x_b - x_a)(y_c - y_b) - (y_b - y_a)(x_c - x_b)\big] k \\ 
+                &= \big[(x_a y_b - x_a y_c) + (y_a x_c - y_a x_b) + (x_b y_c - y_b x_c)\big] k
+            \end{align*}
+            
+            
+            By the right-hand rule convention, when the cross product is positive, the direction along the path from $A \rightarrow B \rightarrow C \rightarrow A$ of the boundary of $\Delta ABC$ is ccw, where our $C$ is to the ``left'' of directed line $\overrightarrow{AB}$; when the cross product is negative, the direction along the path from $A \rightarrow B \rightarrow C \rightarrow A$ of the boundary of $\Delta ABC$ is clockwise. 
+
+            Reference: \cite{crossprod2vec} \cite{mathcurvorien}
+
+            \item Describe an algorithm to test if polygon $P$ (given by a circularly linked list of its $n$ vertices in order) is convex. 
+            
+            From class, a convex polygon is such that, walking along the boundary of the polygon, all angles ``turn'' in the same ``direction'', resulting in all internal angles being less than $180^\circ$ and only consecutive segments intersecting.
+            
+            *Let there exist a method that outputs the sign of the determinant of three given coordinate points, and call it \textsc{DeterminantSign}. Assume it runs $O(1)$ time by plugging in the coordinate values in the formula(s) like those mentioned in part (a).
+             
+            \emph{\textbf{Input}}: A circularly linked list of the $n$ ordered vertices of polygon $P$. We will call these vertices in their sequence $p_1, p_2, ..., p_n$, where $p_1$ is arbitrarily selected as the ``first'' vertex we examine in the algorithm below, $p_2$ is the ``next'' node/vertex of $p_1$, etc.
+
+            \emph{\textbf{Output}}: \textbf{true} or \textbf{false} if $P$ is convex.
+
+            \cbcolor{blue}
+            \cbstart
+            \begin{enumerate}[label=\arabic*.]
+                \item $A \leftarrow p_1$; $B \leftarrow p_2$; $C \leftarrow p_3$
+                \item \texttt{direction} $\leftarrow$ \textsc{DeterminantSign}($A, B, C$)
+                \item \textbf{for} $i \leftarrow 2$ \textbf{to} $n$ 
+                \item \hspace{1cm} $A \leftarrow B$; $B \leftarrow C$; $C \leftarrow C$.\textsf{next}
+                \item \hspace{1cm} \texttt{turn} $\leftarrow$ \textsc{DeterminantSign}($A, B, C$)
+                \item \hspace{1cm} \textbf{if} \texttt{turn} $\neq$ \texttt{direction} \textbf{then} return \textbf{false}
+                \item return \textbf{true}
+            \end{enumerate}
+            \cbend
+
+            \begin{description}
+                \item[Correctness]: The algorithm examines each adjacent angle of the polygon formed by three adjacent points. The direction (in terms of left/right or positive/negative) of the first arbitrary (interior) angle chosen is given by \textsf{direction} (line 2) and formed from 3 vertices. I show by induction that this algorithm works for all polygons of $k \leq n$ vertices, where $3 \leq k \leq n$.
+                
+                For $k = 3$ vertices (triangle), it is trivially true that $P$ is a convex polygon, and the  direction of the $k$ angles match and all are acute. For $k = \{3, ..., i\}$, let all the directions of the angles up to the angle about $p_{i-1}$ (i.e. $\angle p_{i-2}, p_{i-1}, p_i$) match the first, thus far, and therefore $P$ is convex. The next angle formed with the $i\rightarrow\textsf{next}^{th}$ vertex, given by $\angle p_{i-1}, p_{i}, p_{i\rightarrow\textsf{next}}$, will have a \textsf{turn} that either does or doesn't match \textsf{direction}. If it matches, $P$ is convex because all turns are the same. If it doesn't, $P$ is not convex because the angle makes it either a concave polygon or complex polygon.
+                
+
+                \item[Complexity]: Let accessing the next adjacent node in the linked list be a $O(1)$ time operation. Each line in the algorithm runs $O(1)$ time except for the for loop in lines 3 - 6. The for loop examines the ``turn'' of only each adjacent triple on the list of vertices. Therefore, the for loop runs $O(n)$ time. We are not concerned with any sorting of the vertices here. Therefore, the total runtime of the algorithm is $O(n)$.
+            \end{description}
+
+        \end{enumerate}
+
+    \pagebreak
+    % END %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+
+    %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+    \section{Two}
+    \label{sec:two}
+
+
+    \pagebreak
+    % END %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+    %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+    \section{Three}
+    \label{sec:three}
+
+
+    \pagebreak
+    % END %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+% \section{General}
+% \begin{itemize}
+% \item Your text should appear only in the {\it document} part of the file (between {\it begin\{document\}} and {\it end\{document\}})\\
+% \item Simple paragraphs - type whatever you want. LATEX ignores the way the input is formatted, paying attention only to end-of-word, end-of-sentence, end-of-paragraph.\\
+%   \begin{enumerate}
+%   \item A new word is separated by space.\\
+%   \item A new paragraph is separated by two backslashes or by more than one enter commands.\\
+%   \end{enumerate}
+% \end{itemize}
+
+% \subsection{Fonts}
+% Regular, 
+% {\bf bold face, }
+% {\it italic..}
+
+% \subsection{Mathematical symbols and formulas}
+% A formula ($y=\frac{2x+4}{x^2}$), mathematical symbols ($\leq$, $\Rightarrow$) or letters ($\Omega$, $\omega$, $\infty$) appear in the mathematical environment between \$..\$. For detailed description of the available mathematical symbols see any of the sources mentioned in section ~\ref{sec:intro}. Note that lower case appears after \_ ($x_{i}+y_{i}=z_{i}$), upper case appear after \^~ ($n^{2x+3}$)
+
+% \section{Figures}
+% \subsection{Creating figures}
+% Figures can be created using {\bf xfig} (/local/bin/xfig). Draw the figure and export it to a {\it .eps} file. Note that when using xfig a drawing in the upper right corner indicates the available command for each of the mouse buttons. Here is an online converter to make .esp \url{https://cloudconvert.com/png-to-eps}. 
+
+% \subsection{Incorporating the figure in the LATEX document}
+% See figure~\ref{fig:ex}.
+
+% \begin{figure}
+% \centerline{\epsfig{file=example.eps,height=1.5in}}
+% \caption{Example}
+% \label{fig:ex}
+% \end{figure}
+
+% \section{More hints about LATEX}
+% Verbatim is a useful tool to write code segments
+% \begin{verbatim}
+% like  this
+%   or  
+%   this 
+% \end{verbatim}
+% If indentation appear and do not appear where they are needed try adding {\it noindent} or {\it indent}.  \\
+
+% \noindent Theorems can be inserted between begin\{theorem\} to end\{theorem\} as follows:
+% \begin{theorem}
+% This is a theorem.
+% \end{theorem}
+% Definitions, lemmas claims and proofs can be used similarly.
+
+% \section{Converting the LATEX file into a document}
+% \label{sec:output}
+% \begin{enumerate}
+% \item Edit the tex file with a text editor (xemacs)\\
+% \item Convert the file to a .dvi file by typing {\it latex filename.tex}.
+% You can view the dvi file using {\it xdvi filename.dvi}. This stage is the longest and most painful one (especially for beginners). LATEX outputs error messages that indicated the line number with the error and the type of the error. It is useful to use these messages to debug the file.\\
+% \item Convert the dvi file to a ps file {\it dvips -o filename.ps filename.dvi}. You can view the ps file using {\it gv filename.ps} (ghostview).\\
+% \item If needed, convert the ps file to a pdf file {\it ps2pdf filename.ps filename.pdf}.\\
+% \end{enumerate}
+
+\begin{thebibliography}{1}
+\bibitem[1]{crossprod2vec}Cross Product of Two Vectors: \url{https://www.cuemath.com/geometry/cross-product/}
+\bibitem[2]{mathcurvorien}Math World - Curve Orientation: \url{https://mathworld.wolfram.com/CurveOrientation.html}
+\end{thebibliography}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\end{document}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
