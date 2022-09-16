@@ -153,14 +153,65 @@
 
 
     %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-    \section{Two}
+    \section{Unordered Divide-and-Conquer Convex Hull}
     \label{sec:two}
 
-    Two polygons share a line of support if each polygon is entirely to one side of the line (tangent), and at least one point from each polygon is on that line.
+    \begin{enumerate}[label=(\alph*)]
+        \item For $P_1$ and $P_2$ to share a support line, the line must have at least one vertex from each polygon on it, and all the vertices of both polygons must be to one side of the line. If $P_1$ and $P_2$ share no vertices, then they are either 1) completely disjointed, 2) one is completely interior to the other, or 3) their edges intersect. 
+        
+        If they are disjointed, then $P_1$ and $P_2$ can only have 2 support lines in common, both of which would create the new edges of the convex hull created from $P_1 \cup P_2$, regardless of the values of $n_1$ and $n_2$. In other words, each vertex of $P_1$ has 1 or 0 shared support line with $P_2$. Figure ...
+        
+        If one is interior to the other, regardless of the values of $n_1$ and $n_2$, then there are 0 support lines, because any support lines the interior polygon has would intersect the exterior polygon, and any support lines the exterior polygon has would never share a vertex from the interior polygon. Figure ...
+        
+        Finally, the most number of support lines that can occurr at one vertex is 2, because that is when the vertex of one convex polygon is in a position ``between'' two vertices of the other polygon, and the edges of the polygon that include that 1 vertex intersects the greater polygon at the edges formed by those two vertices; otherwise, it may have 0 shared support lines in the case that one vertex of $P_1$ is interior to $P_2$, or it has 1 shared support line in the case that one vertex of $P_1$ is adjacet to only one vertex of $P_2$, and only one of the edges formed by that vertex in $P_1$ intesects only one of the edges formed by that one vertex in $P_2$. Figure ... This can happen at most $2 \times \texttt{min}(n_1, n_2)$, limited by the number of vertices of the lesser polygon and depending on how the two polygons overlap.
 
-    I show that the number of these lines is at most $2 \times \texttt{min}(n_1, n_2)$. 
+        There can be 0 common support lines wherever $P_1$ and $P_2$ share an edge, because that would place the vertices of the polygons on opposite sides of the line. Figure ...
+        
+        Therefore, the number of common support lines of $P_1$ and $P_2$ is at most $2 \times \texttt{min}(n_1, n_2)$.
+ 
+        \pagebreak
+        \item I specify an algorithm that computes the convex hull of convex polygons $P \cup Q$. Since they are already known to be convex, their vertices are already sorted.
+        
 
-    There is at least two lines of support shared by the two polygon that would form the edges of the convex hull of the two disjointed polygons. 
+        \emph{\textbf{Input}}: The sorted vertices of convex polygons $P$ and $Q$, ordered respectively by $\{ p_1, ..., p_{n}\}$ and $\{ q_1, ..., q_{m}\}$. Note that $|P| = n$ and $|Q| = m$.
+
+        \emph{\textbf{Output}}: $\mathcal{CH}(P \cup Q)$
+
+        
+        \cbcolor{blue}
+            \cbstart
+            \textsc{MergeConvexHulls($P$, $Q$)}:
+            \begin{enumerate}[label=\arabic*.]
+                \item $X \leftarrow$ \emph{Merge} $P$ and $Q$.
+                \item Find the convex hull of sorted $X$ using any convex hull finding algorithm on a presorted list. I suggest \textsc{GrahamScan}. 
+                
+                So $Y \leftarrow$ \textsc{GrahamScan}$(X)$.
+
+                \item return $Y$
+            \end{enumerate}
+        \cbend
+
+
+        The runtime is $O(N)$ (for $N = n + m$) because it takes $O(N)$ time to sort the already sorted elements of $P$ and $Q$ into one list $X$. And then we are running Graham Scan on a presorted list, which itself is then $O(N)$ time.
+        
+        \item I specify a divide-and-conquer algorithm that uses \textsc{MergeConvexHulls} without presorting to find the convex hull of an arbitrary set of $n$ points in set $S$.
+        
+        \cbcolor{blue}
+            \cbstart
+            \textsc{DC-ConvexHull($S$)}:
+            \begin{enumerate}[label=\arabic*.]
+                \item $m \leftarrow \frac{n}{2}$
+                \item $L \leftarrow S[0:m-1]$ and $R \leftarrow S[m:n-1]$
+                \item $L' \leftarrow$ \textsc{DC-ConvexHull($L$)}
+                \item $R' \leftarrow$ \textsc{DC-ConvexHull($R$)}
+                \item $S' \leftarrow$ \textsc{MergeConvexHulls($L'$, $R'$)}
+                \item return $S'$
+            \end{enumerate}
+        \cbend
+
+        The runtime is $O(n \log n)$ because it divides $S$ in half to find the convex hulls of the separated set, and takes linear time to ``merge'' the two convex hulls (convex polygons) that were found, i.e. find the convex hull formed by the two given convex hull.
+
+    \end{enumerate}
 
 
     \pagebreak
@@ -170,6 +221,58 @@
     %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
     \section{Three}
     \label{sec:three}
+
+    Given a set $S$ of $n$ planar points in general position and in arbitrary order, I construct these polygons with the following algorithms:
+
+    \begin{enumerate}[label=(\alph*)]
+        \item A simple monotone polygon $R$ whose vertices are exactly the vertices of $S$, which contains the line segment given by the min and max x-coord vertices of $S$. 
+
+        \cbcolor{blue}
+            \cbstart
+            \textsc{MonotoneHull($S$)}:
+            \begin{enumerate}[label=\arabic*.]
+                \item $S' \leftarrow$ sort $S$ by x-coordinate. $\Theta(n\log n)$
+                \item Create the line segment ($y = mx + b$) from the first and last vertices in $S'$ (min and max x-coord vertics of $S$). Let $b$ be this line's y-intersection, and $m$ the slope.
+                \item \textbf{for} $i \leftarrow 0$ to $n$ \hspace{1cm}$\Theta(n)$
+                \item \hspace{1cm} $B[i] \leftarrow y_{S'[i]} - m x_{S'[i]}$ 
+                 
+                    \hspace{1cm} (\emph{the y-insersection of the line given by} 
+                
+                    \hspace{1cm} \emph{the point $S'[i]$ and the slope $m$})
+                \item $j \leftarrow 1$, $R[0] \leftarrow S'[0]$
+                \item \textbf{for} $i \leftarrow 1$ to $n$ \hspace{1cm}$\Theta(n)$
+                \item \hspace{1cm} \textbf{if} $B[i] > b$ 
+                \item \hspace{1.5cm} \textbf{then} $R[j] \leftarrow S'[i]$, $j\leftarrow j + 1$
+                \item \textbf{for} $i \leftarrow n - 1$ downto $0$ \hspace{1cm}$\Theta(n)$
+                \item \hspace{1cm} \textbf{if} $B[i] < b$ 
+                \item \hspace{1.5cm} \textbf{then} $R[j] \leftarrow S'[i]$, $j\leftarrow j + 1$
+                \item return $R$
+            \end{enumerate}
+        \cbend
+
+        This algorithm runs $\Theta(n\log n)$ time due to soring the points by the x-coordinates (line 1). We can find the slope and y-intersection of the line segment given by the min and max x-coord points in $S'$ (line 2). Using that $m$ and $b$, we can create a list of the y-intercepts of each point in $S'$ on a line of slope $m$. This tells us whether or not a point in $S$ is above or below the line segment. Finally, we compute $R$ by finding the list of points above the line segment in order of the sorted $S'$ (loop 6), and adding to it the points below the line segment (found the same way and discarding any duplicate end points) (loop 9).
+
+        \item A simple starshaped polygon $P$ whose vertices are exactly the points in S for which the min x-coord point in $S$ ``sees'' every point in $P$.
+        
+        \cbcolor{blue}
+            \cbstart
+            \textsc{StarHull($S$)}:
+            \begin{enumerate}[label=\arabic*.]
+                \item 
+            \end{enumerate}
+        \cbend
+        
+        \item For a set of points $Q$ such that $\forall q \in Q$, $q \notin S$, describe algorithms to determine if $q$ is interior or exterior to $P$ and $R$.
+        
+        \cbcolor{blue}
+            \cbstart
+            \textsc{RelativeToMino($Q$, $N$)}:
+            \begin{enumerate}[label=\arabic*.]
+                \item 
+            \end{enumerate}
+        \cbend
+
+    \end{enumerate}
 
 
     \pagebreak
@@ -235,6 +338,7 @@
 \begin{thebibliography}{1}
 \bibitem[1]{crossprod2vec}Cross Product of Two Vectors: \url{https://www.cuemath.com/geometry/cross-product/}
 \bibitem[2]{mathcurvorien}Math World - Curve Orientation: \url{https://mathworld.wolfram.com/CurveOrientation.html}
+\bibitem[3]{officehours}Jake and Diane's office hours, classmates: Stephanie, Sydney, and MacKenzie
 \end{thebibliography}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \end{document}
