@@ -566,20 +566,134 @@
 
         \pagebreak
         
-        \item For a set of points $Q$ such that $\forall q \in Q$, $q \notin S$, describe algorithms to determine if $q$ is interior or exterior to $P$ and $R$.
+        \item For a set of points $Q$ such that $\forall q \in Q$, $q \notin S$, describe algorithms to determine if $q$ is interior or exterior to $P$ and $R$. 
+        
+        I assume that $R$ is ordered as described above in part (a), where the first point stored is the min x-coord point, and the rest of the points are ordered going up and clockwise for the polygon. Let $|R| = n$. I give a $\Theta(\log n)$ time algorithm:
         
         \cbcolor{blue}
-            \cbstart
-            \textsc{RelativeToPolygon($Q$, $N$)}:
+        \cbstart
+            \textsc{IntOrExtToMono($q$, $R$)}:
             \begin{enumerate}[label=\arabic*.]
-                \item 
+                \item $r_{\text{min-x}} \leftarrow R[0]$
+                \item $r_{\text{max-x}} \leftarrow$ max x-coord of $R$; \hspace{1cm}$\texttt{max}\leftarrow $ index of $r_{\text{max-x}}$ in $R$
+                \item \textbf{if} $x_q < x_{\text{min}}$ \textbf{then return} \texttt{exterior}
+                \item \textbf{if} $x_q > x_{\text{max}}$ \textbf{then return} \texttt{exterior}
+                \item $m \leftarrow $ slope of $\overline{r_{\text{min-x}} r_{\text{max-x}}}$ (line segment $L$); \hspace{1cm}$b \leftarrow $ y-intercept of $\overline{r_{\text{min-x}} r_{\text{max-x}}}$
+                \item $b_q \leftarrow$ y-intercept of the line given by point $q$ and slope $m$.
+                \item \textbf{if} $b_q > b$ \textbf{then} 
+                
+                \item \hspace{1cm} \texttt{left} $\leftarrow 0$; \texttt{right} $\leftarrow$ \texttt{max}; $i\leftarrow \frac{\texttt{left} + \texttt{right}}{2}$
+
+                \item \hspace{1cm} \textbf{while not} ($x_{R[i]} < x_q$ \textbf{and} $x_q < x_{R[i+1]}$)
+                
+                \item \hspace{2cm} \textbf{if} $x_q < x_{R[i]}$ \textbf{then} \texttt{right} $\leftarrow i - 1$
+                
+                \item \hspace{2cm} \textbf{else} \texttt{left} $\leftarrow i+ 1$;
+                
+                \item \hspace{2cm} $i\leftarrow \frac{\texttt{left} + \texttt{right}}{2}$
+                
+                \item \hspace{1cm} $j\leftarrow R[i]$; $k\leftarrow R[i+1]$
+                
+                \item \hspace{1cm} \texttt{dir} $\leftarrow$ \textsc{Determinant}($k, q, j$)
+                \item \hspace{1cm} \textbf{if} \texttt{dir} $> 0$ \textbf{then return} \texttt{exterior} \hspace{0.25cm} (\emph{above L, and ccw with neighbors})
+                \item \hspace{1cm} \textbf{else return} \texttt{interior} \hspace{2cm} (\emph{above L, and cw with neighbors})
+                
+
+
+                
+                \item \textbf{else}  \texttt{left} $\leftarrow$ \texttt{max}; \texttt{right} $\leftarrow$ $n - 1$; $i\leftarrow \frac{\texttt{left} + \texttt{right}}{2}$
+                
+                \item \hspace{1cm} \textbf{while not} ($x_{R[i]} > x_q$ \textbf{and} $x_q > x_{R[i+1]}$)
+                
+                \item \hspace{2cm} \textbf{if} $x_q > x_{R[i]}$ \textbf{then} \texttt{right} $\leftarrow i - 1$ 
+                
+                \item \hspace{2cm} \textbf{else} \texttt{left} $\leftarrow i + 1$;
+                
+                \item \hspace{2cm} $i\leftarrow \frac{\texttt{left} + \texttt{right}}{2}$
+                
+                \item \hspace{1cm} $j\leftarrow R[i+1]$; $k\leftarrow R[i]$
+                
+                \item \hspace{1cm} \texttt{dir} $\leftarrow$ \textsc{Determinant}($k, q, j$)
+                \item \hspace{1cm} \textbf{if} \texttt{dir} $> 0$ \textbf{then return} \texttt{interior} \hspace{0.25cm} (\emph{below L, and ccw with neighbors})
+                \item \hspace{1cm} \textbf{else return} \texttt{exterior} \hspace{2cm} (\emph{below L, and cw with neighbors})
+                
+                % \item $i\leftarrow \frac{\texttt{left} + \texttt{right}}{2}$
+
+
+
+
+                % \item \textbf{for} $i\leftarrow 0$ to $|R| - 1$
+                % \item \hspace{1cm} \textbf{if} $x_{R[i]} < x_q$ \textbf{and} $x_q < x_{R[i+1]}$ \textbf{and} $i < \texttt{max}$ \textbf{and} $b_q > b$ \textbf{then} 
+                % \item \hspace{2cm} $j\leftarrow R[i]$; $k\leftarrow R[i+1]$
+                % \item \hspace{2cm} \texttt{dir} $\leftarrow$ \textsc{Determinant}($k, q, j$)
+                % \item \hspace{2cm} \textbf{if} \texttt{dir} $> 0$ \textbf{then return} \texttt{exterior} \hspace{0.25cm} (\emph{above L, and ccw with neighbors})
+                % \item \hspace{2cm} \textbf{else return} \texttt{interior} \hspace{2cm} (\emph{above L, and cw with neighbors})
+                % \item \hspace{1cm} \textbf{if} $x_{R[i]} > x_q$ \textbf{and} $x_q > x_{R[i+1]}$ \textbf{and} $i >= \texttt{max}$ \textbf{and} $b_q < b$ \textbf{then}
+                % \item \hspace{2cm} $j\leftarrow R[i+1]$; $k\leftarrow R[i]$
+                % \item \hspace{2cm} \texttt{dir} $\leftarrow$ \textsc{Determinant}($k, q, j$)
+                % \item \hspace{2cm} \textbf{if} \texttt{dir} $> 0$ \textbf{then return} \texttt{interior} \hspace{0.25cm} (\emph{below L, and ccw with neighbors})
+                % \item \hspace{2cm} \textbf{else return} \texttt{exterior} \hspace{2cm} (\emph{below L, and cw with neighbors})
             \end{enumerate}
         \cbend
 
+                \pagebreak 
 
-        left turn, check above (exterior) or below (interior). 
+            Supposing that finding the x-min and x-max coordinate point in sorted polygon $R$ is constant time, then this algorithm runs $\Theta(\log n)$ times. This works by 1) detecting in constant time if point $q$ is above or below the line segment $L$ given by the min and max points by comparing the y-intercepts; 2) Finding the two adjacent points $q$ is located between by their x-coordinates. This is done in logarithmic time because detecting above/below $L$ means half or a part of the points of $R$ doesn't have to be checked. Then we run something similar to binary search to find $q$'s x-coord neighbors (see while loops in line 9 (above $L$) and line 18 (below $L$)). Finally, using $q$ and its neighbors $j$ and $k$, we can use the formula in question 1 to calculate the determinant of the three points to see the whether or not they are ordered in a ccw (positive determinant) or cw (negative determinant) manner. If $q$ is above $L$, then a ccw orientation with its neighbors means it is exterior to $R$, otherwise it is interior. If $q$ is below $L$, then a cw orientation with its neighbors means it is exterior to $R$, otherwise it is interior. And finally, $q$ is clearly exterior if it's x-coord is less than the min's, or if it is greater than the max's. 
 
-        right turn, check above (interior) or below (exterior)
+
+            \pagebreak
+
+            I assume that $P$ is ordered as described in part (b), where the first point stored is the min x-coord point, and the rest of the points are ordered in descreasing ordered of theirs slopes created with the line segment with the min point (i.e. clockwise order). Let $|P| = n$. I give a $\Theta(\log n)$ time algorithm:
+
+        \cbcolor{blue}
+        \cbstart
+            \textsc{IntOrExtToStar($q$, $P$)}:
+            \begin{enumerate}[label=\arabic*.]
+                \item $p_0 \leftarrow P[0]$
+                \item \textbf{if} $x_q < x_{p_0}$ \textbf{then return} \texttt{exterior}
+                \item $m_q \leftarrow$ slope of line segment $\overline{p_0 q}$
+
+                $m_1 \leftarrow$ slope of line segment $\overline{p_0 p_1}$
+
+                $m_{n-1} \leftarrow$ slope of line segment $\overline{p_0 p_{n - 1}}$
+                
+                \item \textbf{if} $m_q > m_1$ or $m_q < m_{n-1}$ \textbf{then return} \texttt{exterior}
+                
+                \item \texttt{left} $\leftarrow 0$ ; \texttt{right} $\leftarrow n - 1$; $i \leftarrow \frac{\texttt{left} + \texttt{right}}{2}$; 
+                
+                    $m_i \leftarrow$ slope of line segment $\overline{p_0 p_{i}}$; 
+                    
+                    $m_{i+1} \leftarrow$ slope of line segment $\overline{p_0 p_{i+1}}$
+                
+                \item \textbf{while not} ($m_{i} > m_{q}$ and $m_{q} > m_{i+1}$)
+                \item \hspace{1cm} \textbf{if} $m_q > m_i$ \textbf{then} \texttt{right} $\leftarrow i - 1$
+                \item \hspace{1cm} \textbf{else} \texttt{left} $\leftarrow i + 1$
+                \item \hspace{1cm} $i \leftarrow \frac{\texttt{left} + \texttt{right}}{2}$
+                \item $j\leftarrow P[i]$
+                
+                 $k\leftarrow P[i+1]$
+
+                \item \texttt{dir} $\leftarrow$ \textsc{Determinant}($k, q, j$)
+                \item \textbf{if} \texttt{dir} $> 0$ \textbf{then return} \texttt{exterior} \hspace{1cm} (\emph{ccw, exterior to P})
+                \item \textbf{else return} \texttt{interior} \hspace{1cm} (\emph{cw, interior to P})
+                
+
+                % \item \textbf{for} $i \leftarrow 1$ to $n-2$
+                % \item \hspace{1cm} $m_i \leftarrow$ slope of line segment $\overline{p_0 p_{i}}$
+                % \item \hspace{1cm} $m_{i+1} \leftarrow$ slope of line segment $\overline{p_0 p_{i+1}}$
+                % \item \hspace{1cm} \textbf{if} $m_{i} < m_{q}$ and $m_{q} < m_{i+1}$ \textbf{then}
+                % \item \hspace{2cm} $j\leftarrow P[i]$
+                
+                %     \hspace{2cm} $k\leftarrow P[i+1]$
+
+                % \item \texttt{dir} $\leftarrow$ \textsc{Determinant}($k, q, j$)
+                % \item \textbf{if} \texttt{dir} $> 0$ \textbf{then return} \texttt{exterior} \hspace{1cm} (\emph{ccw, exterior to P})
+                % \item \textbf{else return} \texttt{interior} \hspace{1cm} (\emph{cw, interior to P})
+            \end{enumerate}
+        \cbend
+
+        This algorithms runs in $\Theta(\log n)$ time. Since all points in $P$ are sorted by their slopes relative to the x-min point of $P$, we can tell whether or not $q$ is exterior or intertior by its slope with the x-min point. If $q$'s x-coord is less than that of the min point, then it is trivially exterior to $P$. If instead $q$'s slope is greater than $P$'s greatest slope (of line $\overline{p_0 p_1}$), or if $q$'s slope is less than $P$'s least slope value (of line $\overline{p_0 p_{n-1}}$), then it is also trivially exterior. Finally, using an algorithm similar to binary search (line 5 - 9), we find the adjacent points in $P$ where which $q$'s slop falls betweek them. Since the points are already sorted by their slopes, finding the neighbors $j$ and $k$ takes logarithmic time. And finally, like before, we can calculate in constant time the determinant given the three points (I start with the point that has the lesser slope) to determine the ordering orientation of the points. If the $q$ createsa ccw turn with $j$ and $k$ (positive determinant), then it is exterior to $P$. If $q$ creates a cw turn with its neighbors (negative determinant), then it is interior to $P$. 
+
 
 
         Reference: \cite{officehours}
