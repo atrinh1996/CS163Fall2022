@@ -491,7 +491,7 @@
         Let the algorithm hold for set $S$ of size $n$ for the first the $n - 1$ vertices ($\{p_0, ..., p_{n - 2}\} \in P$), such that all the line segments created from $p_0$ to every other point in $P$ is also in $P$. Since the first $n - 1$ vertices of $P$ have already been found, that means they are ordered by their slopes with $p_0$. Then, the $n^{th}$ point of the set $S$ must appear below the last point in $P$ because the slope of $\overline{p_0 p_{n-1}}$ is less than the slope of $\overline{p_0 p_{n - 2}}$. The new edges of polygon $P$ formed by $\overline{p_{n-2} p_{n - 1}}$ and $\overline{p_0 p_{n - 1}}$ replace the previous edge of $\overline{p_0 p_{n - 2}}$. Since $\overline{p_0 p_{n - 1}}$ does not intersect $\overline{p_0 p_{n - 2}}$ execpt at $p_0$, the line segment given by $\overline{p_0 p_{n - 2}}$ still remains inside of polygon $P$ (Fig \ref{fig:normalstar}).
 
         \begin{figure}[h] 
-            \begin{tabular}{cc}
+            \begin{tabular}{cc} 
                 \begin{subfigure}{0.5\textwidth}
                     \centering
                     \includegraphics[width=0.7\textwidth]{images/stara.PNG}
@@ -638,7 +638,14 @@
 
                 \pagebreak 
 
-            Supposing that finding the x-min and x-max coordinate point in sorted polygon $R$ is constant time, then this algorithm runs $\Theta(\log n)$ times. This works by 1) detecting in constant time if point $q$ is above or below the line segment $L$ given by the min and max points by comparing the y-intercepts; 2) Finding the two adjacent points $q$ is located between by their x-coordinates. This is done in logarithmic time because detecting above/below $L$ means half or a part of the points of $R$ doesn't have to be checked. Then we run something similar to binary search to find $q$'s x-coord neighbors (see while loops in line 9 (above $L$) and line 18 (below $L$)). Finally, using $q$ and its neighbors $j$ and $k$, we can use the formula in question 1 to calculate the determinant of the three points to see the whether or not they are ordered in a ccw (positive determinant) or cw (negative determinant) manner. If $q$ is above $L$, then a ccw orientation with its neighbors means it is exterior to $R$, otherwise it is interior. If $q$ is below $L$, then a cw orientation with its neighbors means it is exterior to $R$, otherwise it is interior. And finally, $q$ is clearly exterior if it's x-coord is less than the min's, or if it is greater than the max's. 
+            Supposing that finding the x-min and x-max coordinate point in sorted polygon $R$ is constant time, then this algorithm runs $\Theta(\log n)$ time for a point $q$. This works by 1) detecting in constant time if point $q$ is above or below the line segment $L$ given by the min and max points by comparing the y-intercepts; 2) Finding the two adjacent points $q$ is located between by their x-coordinates. This is done in logarithmic time because detecting above/below $L$ means half or a part of the points of $R$ doesn't have to be checked. Then we run something similar to binary search to find $q$'s x-coord neighbors (see while loops in line 9 (above $L$) and line 18 (below $L$)). Finally, using $q$ and its neighbors $j$ and $k$, we can use the formula in question 1 to calculate the determinant of the three points to see the whether or not they are ordered in a ccw (positive determinant) or cw (negative determinant) manner (I pick the order starting with the point with the highest x-coord of the three, $k$). If $q$ is above $L$ (line 8-16), then a ccw orientation with its neighbors means it is exterior to $R$ (Fig. \ref{fig:3c1}.a), otherwise if it is above $L$ and cw, it is interior (Fig. \ref{fig:3c1}.b). If $q$ is below $L$ (line 17-25), then a ccw orientation with its neighbors means it is interior to $R$ (Fig. \ref{fig:3c1}.c), otherwise it is exterior (Fig. \ref{fig:3c1}.d). And finally, $q$ is clearly exterior if it's x-coord is less than the min's, or if it is greater than the max's (Fig. \ref{fig:3c1}.e). Running this algorithm for a set of points $Q$ of size $m$ would then be time $\Theta(m \log n)$.
+
+            \begin{figure}[h]
+                \centering
+                \includegraphics[width=1\textwidth]{images/3c1.PNG}
+                \caption{Modified monotone polygon $R$ from Fig. \ref{fig:mono3}, annotated to demonstrate whether a point $q$ (here $q \in \{a, b, c, d, e, e\}$) that is not in $R$, is interior or exterior to $R$. See discussion above.}
+                \label{fig:3c1}
+            \end{figure}
 
 
             \pagebreak
@@ -692,7 +699,30 @@
             \end{enumerate}
         \cbend
 
-        This algorithms runs in $\Theta(\log n)$ time. Since all points in $P$ are sorted by their slopes relative to the x-min point of $P$, we can tell whether or not $q$ is exterior or intertior by its slope with the x-min point. If $q$'s x-coord is less than that of the min point, then it is trivially exterior to $P$. If instead $q$'s slope is greater than $P$'s greatest slope (of line $\overline{p_0 p_1}$), or if $q$'s slope is less than $P$'s least slope value (of line $\overline{p_0 p_{n-1}}$), then it is also trivially exterior. Finally, using an algorithm similar to binary search (line 5 - 9), we find the adjacent points in $P$ where which $q$'s slop falls betweek them. Since the points are already sorted by their slopes, finding the neighbors $j$ and $k$ takes logarithmic time. And finally, like before, we can calculate in constant time the determinant given the three points (I start with the point that has the lesser slope) to determine the ordering orientation of the points. If the $q$ createsa ccw turn with $j$ and $k$ (positive determinant), then it is exterior to $P$. If $q$ creates a cw turn with its neighbors (negative determinant), then it is interior to $P$. 
+        This algorithms runs in $\Theta(\log n)$ time. Since all points in $P$ are sorted by their slopes relative to the x-min point of $P$, we can tell whether or not $q$ is exterior or intertior by its slope with the x-min point. If $q$'s x-coord is less than that of the min point, then it is trivially exterior to $P$ (Fig. \ref{fig:3c2}.c). If instead $q$'s slope is greater than $P$'s greatest slope (of line $\overline{p_0 p_1}$), or if $q$'s slope is less than $P$'s least slope value (of line $\overline{p_0 p_{n-1}}$), then it is also trivially exterior (Fig. \ref{fig:3c2}.c). Finally, using an algorithm similar to binary search (line 5-9), we find the adjacent points in $P$ where which $q$'s slope falls betweek them. Since the points are already sorted by their slopes, finding the neighbors $j$ and $k$ takes logarithmic time. And finally, like before, we can calculate in constant time the determinant given the three points (I start with the point that has the lesser slope, i.e. $k$ in the algorithm and figures) to determine the ordering orientation of the points. If the $q$ creates a ccw turn with $j$ and $k$ (positive determinant), then it is exterior to $P$ (Fig. \ref{fig:3c2}.a). If $q$ creates a cw turn with its neighbors (negative determinant), then it is interior to $P$ (Fig. \ref{fig:3c2}.b). Running this algorithm for a set of points $Q$ of size $m$ would then be time $\Theta(m \log n)$.
+        
+        \begin{figure}[h]
+            \centering 
+            \begin{tabular}{ccc}
+                \begin{subfigure}{0.33\textwidth}
+                    \centering
+                    \includegraphics[width=1\textwidth]{images/3c2a.PNG}
+                    \label{subfig:3c2a}
+                \end{subfigure} & 
+                \begin{subfigure}{0.33\textwidth}
+                    \centering
+                    \includegraphics[width=1\textwidth]{images/3c2b.PNG}
+                    \label{subfig:3c2b}
+                \end{subfigure} & 
+                \begin{subfigure}{0.33\textwidth}
+                    \centering
+                    \includegraphics[width=1\textwidth]{images/3c2c.PNG}
+                    \label{subfig:3c2c}
+                \end{subfigure} 
+            \end{tabular}
+            \caption{Modified zoomed-in view of different parts of polygon $P$ from problem 3b, annotated to demonstrate whether a point $q$ (here $q \in \{a, b, c\}$) that is not in $P$, is interior or exterior to $P$. Points 0 and $1, n-1, j, k$ are in $P$. It can be seen that for some $q$ whose slope is between those of adjacent-slope points $j, k$, that $q$ is exterior (a, green) when $\Delta kaj$ is given in ccw order; conversly, $q$ is interior (b, purple) when $\Delta kbj$ is given in cw order. All other times, $q$ is exterior, either because it is to the left of the min point 0, or its slope is greater than that of $P$'s highest slope edge, or its slope is less than that of $P$'s least slope edge ($q = c$).}
+            \label{fig:3c2}
+        \end{figure}
 
 
 
@@ -709,7 +739,7 @@
 \begin{thebibliography}{1}
 \bibitem[1]{crossprod2vec}Cross Product of Two Vectors: \url{https://www.cuemath.com/geometry/cross-product/}
 \bibitem[2]{mathcurvorien}Math World - Curve Orientation: \url{https://mathworld.wolfram.com/CurveOrientation.html}
-\bibitem[3]{officehours}Jake and Diane's office hours, classmates: Stephanie, Sydney, and MacKenzie with homework problem discussions.
+\bibitem[3]{officehours}Jake and Diane's office hours, classmates: Stephanie, Sydney, Anju, and MacKenzie with homework problem discussions.
 \end{thebibliography}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \end{document}
