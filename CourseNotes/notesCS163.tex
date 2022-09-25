@@ -213,6 +213,46 @@
     %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
     %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+    \section{Algorithms: Overview}
+    \label{sec:allalgo}
+
+        \begin{center}
+            \begin{tabular}{|p{3cm}|p{3.5cm}|p{2cm}|p{2cm}|p{2cm}|p{2.25cm}|}
+                \hline
+                \hline
+                \textbf{TOPIC/type} & \textbf{Name} & \textbf{Best} & \textbf{Average} & \textbf{Worst} & \textbf{Amortized} \\ 
+                \hline
+                \hline
+                \hyperref[sec:convexhull]{\textbf{Convex Hull}} & & $\Omega(n)$ & & $O(n^4)$ &  \\
+                \hline
+                incremental & \hyperref[subsec:chn4]{Naive Approach (Triples)} & $\Omega(n^4)$ & $\Theta(n^4)$ & $O(n^4)$ & \\
+                \hline
+                incremental & \hyperref[subsec:slowhull]{Slow $\mathcal{CH}$ (Pairs)} & $\Omega(n^3)$ & $\Theta(n^3)$ & $O(n^3)$ & \\
+                \hline
+                incremental & \hyperref[subsec:giftwrapping]{Jarvis March(Gift Wrapping)} & $\Omega(n h)$ & $\Theta(n \log n)$ & $O(n^2)$ & \\
+                \hline
+                incremental & \hyperref[subsec:gscan]{Graham Scan} & $\Omega(n \log n)$ & $\Theta(n \log n)$ & $O(n \log n)$ & \\
+                \hline
+                D\&C& \hyperref[subsec:quickhull]{Quick Hull} & $\Omega(n\log n)$ & $\Theta(n \log n)$ & $O(n^2)$ & \\
+                \hline
+                prune\&search& \hyperref[subsec:ultimatehull]{Marriage before Conquest (Ultimate)} & $\Omega(n \log h)$ & $\Theta(n \log h)$ & $O(n \log h)$ & \\
+                \hline
+                order decomp & \hyperref[subsec:dynamichull]{Dynamic Convex Hull} & $\Omega(\log^2 n)$ & $\Theta(\log^2 n)$ & $O(\log^2 n)$ & \\
+                \hline
+                & & & & & \\
+                \hline
+                & Name & $\Omega(n \log n)$ & $\Theta(n \log n)$ & $O(n \log n)$ & \\
+                \hline
+                \hline
+            \end{tabular}
+        \end{center}
+
+        \emph{h is the number of points on $\mathcal{CH}$.}
+
+    \pagebreak
+    %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+    %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
     \section{Intro: Computational Geometry - A User's Guide (Notes)}
     \label{sec:compgeointro}
     Introduction to algorithims for computations that are geometric in nature. Souvaine \& Dobkin describe some methods with geometric applications.
@@ -273,6 +313,8 @@
     \section{Convex Hull}
     \label{sec:convexhull}
     Covered in \cite{berg08} CH. 1.1
+
+    HW 1
     
     %%%
     \subsection{Geometry of Convex Hull}
@@ -326,10 +368,58 @@
         \item Fig. \ref{fig:convexhull3}: To compute a convex hull of a set of points, $P = \{p_1, p_2, ... p_9\}$, we compute a list of those vertices from $P$ that are the vertices of $\mathcal{CH}(P)$, i.e. $\{p_4, p_5, p_8, p_2, p_9\}$, and list them in clockwise order. Defining $\mathcal{CH}(P)$ as a convex polygon is more useful than discussing the intersection of all convex sets. 
         \item Fig. \ref{fig:convexhull4}: For points $p$ and $q$ that are endpoints of an edge and that are in $P$, we direct a line through $p$ and $q$, and if $\mathcal{CH}(P)$ lies to one side, then all points in $P$ must lie to that side of the $\overline{pq}$ line. And if all points of $P \setminus \{p, q\}$ lie to one side of $\overline{pq}$, then $\overline{pq}$ is an edge of the $\mathcal{CH}(P)$.
     \end{itemize}
+
+    From Class, Algorithmic \textbf{Paradigms} covered:
+    \begin{itemize}
+        \item Sweepline/Incremental 
+        \item Divide \& Conquer 
+        \item Prune \& Search
+    \end{itemize}
+    %%%%%%%%%
+
+    %%% 
+    \subsection{\textbf{Algorithm} Naive Convex Hull - $O(n^4)$}
+    \label{subsec:chn4}
+    From class: 
+
+    For set of points in polygon $P$, for every triple $i, j, k$, for every point $l$ not equal to $i, j, k$, if $l \in \Delta ijk$, discard $l$, as point inside the $\Delta$ can't be on the $\mathcal{CH}$. This runs $O(n^4)$ time ($n \times n \times n-1 \times n-2$).
+    %%%%%%%%%
+
+    %%%
+    \subsection{\textbf{Algorithm} Ways to find Left/Right Turn}
+    \label{subsec:turn}
+    From class: 
+
+    $\Theta(1)$ time: You can find the counter clockwise (left) or clockwise (right) turn of an angle given three points but calculating the determinant based on the order of the points that they were given in. 
+
+    The determinant is twice the area of a triangle. Given points $A, B, C$, they form a ccw turn if the determinant is positive; o.w. if the area is negative, it is a right turn. This is verified using basic geometry or linear algebra. 
+    \begin{align*}
+        D &= \begin{vmatrix}
+            x_a &  y_a & 1 \\
+            x_b &  y_b & 1 \\
+            x_c &  y_c & 1
+        \end{vmatrix}  
+        = x_a \times \begin{vmatrix}
+            y_b & 1 \\
+            y_c & 1
+        \end{vmatrix}
+        - y_a \times \begin{vmatrix}
+            x_b & 1 \\
+            x_c & 1
+        \end{vmatrix} 
+        + \begin{vmatrix}
+            x_b &  y_b \\
+            x_c &  y_c 
+        \end{vmatrix} \\ 
+        &= x_a (y_b - y_c) - y_a (x_b - x_c) + (x_b y_c - x_c y_b) \\
+        &= (x_a y_b - x_a y_c) + ( x_c y_a - x_b y_a) + (x_b y_c - x_c y_b) \\
+    \end{align*}
+    A set of points is a $\mathcal{CH}$ if all the points turn in the same direction. If one different direction is detected, then the polygon is either complex or concave. 
     %%%%%%%%%
 
     %%%
     \subsection{\textbf{Algorithm} \textsc{SlowConvexHull}($P$) - Naive $O(n^3)$}
+    \label{subsec:slowhull}
         \emph{Input}: A set $P$ of points in a plane.
 
         \emph{Output}: A list $\mathcal{L}$ cotnaining vertices of $\mathcal{CH}(P)$ in clockwise order. 
@@ -346,6 +436,8 @@
         \end{enumerate}
 
         \begin{itemize}
+            \item This is ``piecewise linear'' in finding the edges of a polygon.
+            \item ``Supporting Line'' is such that all points of the polygon is on the line or to one side of the line (on the closed half plane).
             \item \emph{*Assume for now that methods to test if a point is to the right or left of a line is available. Assume this primative operation is O(1).}
             \item \emph{*initially ignores the degenerate case, where a point r may lie on $\overrightarrow{pq}$}. To consider the degeneracy, must specify that $\overrightarrow{pq}$ is an edge of $\mathcal{CH}(P)$ if and only if all other $r \in P$ lie strictly on the right or left of $\overrightarrow{pq}$, or they lie on the open line segment $\overline{pq}$.
             \item \emph{Problems with rounding error could arise should coordinates are represented in floating point numbers, leading to unexpected results.}
@@ -360,7 +452,8 @@
         %%%%%%%%%
 
         %%%
-        \subsection{\textbf{Algorithm} ConvexHull($P$) - Incremental Algorithm $O(n \log n)$}
+    \subsection{\textbf{Algorithm} ConvexHull($P$) - Incremental Algorithm $O(n \log n)$}
+    \label{subsec:chinc}
 
         Needs only a sorting method and a method to test if three points can make a right turn. 
 
@@ -432,14 +525,199 @@
             \caption{Convex Hull Algorithm - Correctness}
             \label{fig:chalgo3}
         \end{figure}
-
-
         %%%%%%%%%
         
 
-        
+    %%%
+    \subsection{\textbf{Algorithm} Jarvis March (Gift Wrapping) - $O(n^2)$}
+    \label{subsec:giftwrapping}
+    \url{https://iq.opengenus.org/gift-wrap-jarvis-march-algorithm-convex-hull/}
 
+        \begin{itemize}
+            \item Sweepline/Incremental algorithm 
+            \item Starting with an extreme point (leftmost/rightmost/etc.), and keep wrapping the points in ccw direction. 
+            \item Finding the \emph{next} point involves calculating if the the next candidate makes a ccw orientation with the previous two points. Decide on the directionality, but essentially: 
+
+            \begin{itemize}
+                \item Caclulate all the slopes from current point with all the other points. 
+                \item Pick the point that gave use the minimum slope. 
+                \item The min slope point is now the current point. Repeat this process until we return to the first point. 
+                \item \emph{You may need to pick a directionality when you get to the other extreme and start to ``turn around''.}
+            \end{itemize}
+
+            \item This algorithm is output sensitive. So runtime is $O(nh)$, and worst is when $h = n$.
+        \end{itemize}
+
+    %%%%%%%%%
+
+    %%%
+    \subsection{\textbf{Algorithm} Graham Scan - $O(n \log n)$}
+    \label{subsec:gscan}
+        \url{https://iq.opengenus.org/graham-scan-convex-hull/}
+
+        \begin{itemize}
+            \item Uses a stack to remove concavities. Incremental.
+            \item Efficient and can run $O(n \log n)$
+            \item The runtime rather comes from finding a central position (or even any), calculating all their polar angles (or slopes), and \emph{sorting} them by the angles first. This algorithm comes with a \textbf{Pre-processing} step.
+            \item Add the smallest y-coord point to the stack (finding it takes $O(n)$ time), add the next two points in the order to the stack (pre-processing took $O(n\log n)$). Calculate their orientation. The the next point is a candidate; calculate the orientation of the candidate and top two points in the stack. If you get the same orientation, add cancdidate to stack move on to next point; else, pop the stack, and check again. Repeat the popping until you get the orientation desired. Every element is pushed and popped from the stack at most once, and assuming each stack operation takes $O(1)$, so forming the hull is $O(n)$. 
+        \end{itemize}
+    %%%%%%%%%
+
+    %%%
+    \subsection{Bridges}
+    \label{subsec:bridge}
         
+        \begin{itemize}
+            \item A \emph{bridge} is the support line that forms the edge of $\mathcal{CH}$ or one that forms a new $\mathcal{CH}$ edge between two convex polygons when we want to form a new convex hull from their merge. 
+            \item Bridge finding is the goal of a divide and conquer method for finding convex hulls.
+            \item Bridge finding takes logarithmic time. And there are 8 cases to examine. 
+        \end{itemize}
+
+    %%%%%%%%%
+
+    %%%
+    \subsection{Divide \& Conquer Convex Hull Methods}
+    \label{subsec:dchull}
+        
+        \begin{itemize}
+            \item Typically $T(n) = 2\ T(\frac{n}{2}) + \Theta(n)$. Outline for an unsorted set of points $S$:
+                \begin{itemize}
+                    \item \emph{assume pre-sort; or sort ($O(n \log n)$)}
+                    \item Find $\mathcal{CH}(S, 1, \frac{n}{2})$
+                    \item Find $\mathcal{CH}(S, \frac{n}{2} + 1, n)$
+                    \item Merge the $\mathcal{CH}$'s
+                \end{itemize}
+            \item Something like binary search ($O(\log n)$) can be used to find the bridge, for $T(n) = 2\ T(\frac{n}{2}) + \Theta(\log n)$.
+            \item Some useful data structures, such as \textbf{concatenable queue}, can make inserting a point, deleting a point, or finding a point, splitting, joining (implant) take time $O(\log n)$.
+            \item 
+        \end{itemize}
+
+    %%%%%%%%%
+
+    %%%
+    \subsection{\textbf{Algorithm} Quick Hull - $O(n^2)$}
+    \label{subsec:3dconvexhull}
+        \url{https://iq.opengenus.org/quick-hull-convex-hull/}
+
+        \url{https://www.geeksforgeeks.org/quickhull-algorithm-convex-hull/}
+
+        \begin{itemize}
+            \item Like quicksort. Divide and Conquer method.
+            \item Find the leftmost and rightmost points. 
+            \item Find the highest and lowest points relative to the left-right's slope. 
+            \item Form a triangle with the left, right, and lowest points. Discard all points inside triangle. 
+            \item Repeat this process with one of the left or right, and the extreme point you picked (i.e. one of the edge of the triangle).
+            \item Best case is $O(n\log n)$. Worse case is $O(n^2)$.
+        \end{itemize}
+
+    
+    %%%
+    \subsection{\textbf{Algorithm} Ultimate Planar Convex Hull (Marriage Before Conquest ) - $O(n \log h)$}
+    \label{subsec:ultimatehull}
+
+    \url{https://iq.opengenus.org/kirkpatrick-seidel-algorithm-convex-hull/}
+
+        \begin{itemize}
+            \item Prune \& Search. Output sensitive.
+            \item Instead of recurisng on each half after splitting the set like in a D\&C, this computes how the sets should be merged, then recurse on subsets. This finds upper hull, and then when you fid the lower hull, the two sets can be concatenated.
+            \item Briefly: \emph{Given a set, find the median vertical. Next goal is to find the bridge that crosses the median vertical. By definition of $\mathcal{CH}$, all points beneath this line is not in the $\mathcal{CH}$, so you discard/prune these points. The remaining points are split into the $L$ and $R$ subsets, and you recurse on them}. 
+            \item The Kirkpatrick-Seidel algorithm:
+            \begin{enumerate}
+                \item \emph{don't sort!}
+                % \item Split the points in half, the $L$ set and the $R$ set.
+                % \item Find the bridge between $L$ and $R$:
+                \item Find the median vertical of the set of points ($T(n) = T(\frac{n}{5}) + T(\frac{2n}{4}) + \Theta(n) = \Theta(n) = \Theta(n)$).
+                \item PAIRING: Randomly pair up the points, and calculate the misc. slopes. We have $\frac{n}{2}$ pairs.
+                \item Find the median slope ($O(n)$), $m_{\text{median}}$.
+                \item Calculate all the y-intercept of all the points if they have slope $m_{\text{median}}$. ``Sweep slope of $m_{\text{median}}$'', and find the most extreme max y-intercept, $b_{\text{max}}$.
+                \item BridgeFind: $T_{\text{bridge}}(n) \leq T_{\text{bridge}}(n - \floor*{\frac{n}{4}}) + O(n) = O(n)$
+                
+                This is when we start removing points that don't meet our criteria:
+
+                \begin{enumerate}
+                    \item rotate the line $y_b = m_{\text{median}} x_b + b_{\text{max}}$. Find the bridge with the first point you hit. 
+                    \item For the example where $b_{\text{max}}$ is on the right side and has a negative slope for $m_{\text{median}}$, if it his a point that is paired with a point that forms a negative slope, discard the lower point, as you can only ever hit the upper point to be on the hull. Keep all other points. 
+                    \item More succinctly, for this pruning step, using the extreme point, $p_{\text{max}}$, you found:
+                    \begin{itemize}
+                        \item If $p_{\text{max}}$ is on the \emph{right} of line $x_\text{median}$ (where $x_{p_\text{max}} > x_\text{median}$), for every line with a slope less than $m_{\text{median}}$, discard its lower/right point.
+                        \item If $p_{\text{max}}$ is on the \emph{left} of line $x_\text{median}$ (where $x_{p_\text{max}} < x_\text{median}$), for every line with a slope greater than $m_{\text{median}}$, discard its upper/left point.
+                    \end{itemize}
+                    \item This process discards $\frac{1}{4}$ of the points in the set, the pruning. 
+                    \item Repeat from the PAIRING step until 2 points are left. These are the points of the Bridge.
+                    \begin{equation*}
+                        T(n, h) \leq \begin{cases}
+                            0 &\text{if } h = 1 \\
+                            O(n) &\text{if } h = 2 \\
+                            T(\frac{n}{2}, h_l) + T(\frac{n}{2}, h_r) + T_{\text{bridge}}(n) &\text{if } h \geq 3, \\
+                            & \text{where } h_l + h_r = h, h_r, h_l \geq 1
+                        \end{cases}
+                    \end{equation*}
+
+                \end{enumerate}
+
+             
+
+                \item Repeat from step 2 for remainder subsets $L$ and $R$ pm either side of the bridge.
+            \end{enumerate}
+        \end{itemize}
+
+        \textbf{Proof}
+
+        \emph{Claim:} $T_{\text{bridge}}(n) \leq T_{\text{bridge}}(n - \floor*{\frac{n}{4}}) + O(n)$
+
+        Show by induction on size of $h$ that $T(n, h) \leq c n \log h$. 
+
+        \emph{Basis:} If $h = 2$ (minimum for top hull of the $\mathcal{CH}$), the top edge has at least 2 points. (\emph{$\log 2 = 1$}). $$ T(n, 2) = c_1 n \leq cn \log 2 \hspace{2cm} \text{(pick $c \geq c_1$)}$$
+
+        \emph{Inductive Hypothesis:} $T(n, h) \leq ch \log h$, for $h\leq k$.
+        
+        \emph{Inductive Step:} 
+        \begin{align*}
+            T(n, h) &\leq c_1 n + T(\frac{n}{2}, h_l) + T(\frac{n}{2}, h_r) \\
+            &\leq c_1 n + \frac{cn}{2} \log h_l + \frac{cn}{2} \log h_r \\
+            &\leq c_1 n + \frac{cn}{2} (\log h_l + \log h_r) \\
+            &\leq c_1 n + \frac{cn}{2} \log (h_l h_r) \\
+            &\leq c_1 n + \frac{cn}{2} \log (h_l (h - h_l)) \\
+            &\leq c_1 n + \frac{cn}{2} \log (\frac{h}{2})^2 \\
+            &\leq c_1 n + cn \log (\frac{h}{2}) \\
+            &\leq c_1 n + cn \log h - cn \log 2\\
+            &\leq cn \log h \hspace{2cm} \text{if } c = c_1 \\
+        \end{align*}
+
+    %%%%%%%%%
+
+    %%%
+    \subsection{\textbf{Algorithm} Dynamic $\mathcal{CH}$ / Order Decomposable Problem - $O(\log^2 n)$}
+    \label{subsec:dynamichull}
+
+        \url{https://www.geeksforgeeks.org/dynamic-convex-hull-adding-points-existing-convex-hull/}
+
+        See Dynamic Convex Hull Notes.
+
+        See user guide section on this.
+
+        \begin{itemize}
+            \item Order Decomposable Problem, Point Inclusion, Detecting Intersection 
+            \item This algorithm addresses when a new point is added to the current set we already computed the convex hull for, or delete a point from the set. This avoids recalculating the entire set for changes regarding single points.
+            \item Using a concatenable queue makes bridge finding between two hulls is $O(\log n)$; then we can concatenate the left portion of the left hull with the right portion of the right hull. This relies on sorting the points though, so sorting dominates the runtime at $O(n \log n)$, while the merge gives a recurrance of $T(n) = 2 T(\frac{n}{2}) + O(\log n) = O(n)$.
+            \item Best to use a dynamic (augmented) tree as the data structure. The root contains the points of the $\mathcal{CH}$, while the subtrees/node has info about the partial hulls, and can point to another tree. We can retain the info of points that aren's in the $\mathcal{CH}$. The leaves are the actual data/points. 
+            \item There are 8 cases to examine to find the bridge between hulls $A$ and $B$. See Class Nodes for Dynamic Convex Hull. But succinctly, when examining if line $\overline{ab}$ could be the bridge, we consider the angles given by $a$ and its neighbors and by $b$ and its neighbors ($\angle a_l\ a\ a_r$ and $\angle b_l\ b\ b_r$), the angles are relative to the line $\overline{ab}$: 
+            \begin{enumerate}
+                \item $\angle a_l\ a\ a_r$, $\angle b_l\ b\ b_r \leq 180^{\circ}$ (both edges of each angle are above $\overline{ab}$) $\longrightarrow$ $\overline{ab}$ is the bridge.
+                \item $\angle b\ a\ a_l \geq 180^{\circ}$ ($\overline{a\ a_l}$ falls ``below'' $\overline{ab}$) $\longrightarrow$ points $a$ and all to the right of $a$ (``above'' $\overline{ab}$) can't be the bridge point, discard. The bridge will be found in $B$ and the left subchain of $A$ from $a$. 
+                \item $\angle a\ b\ b_r \geq 180^{\circ}$ ($\overline{b\ b_r}$ falls ``below'' $\overline{ab}$) $\longrightarrow$ points $b$ and all to the left of $b$ (``above'' $\overline{ab}$) can't be the bridge point, discard. The bridge will be found in $A$ and the right subchain of $B$ from $b$. 
+                \item Both $\angle a_l\ a\ a_r, \angle a_r\ a\ a_l > 90^{\circ}$ (both $\overline{a\ a_r}$ and $\overline{b\ b_l}$ fall ``below'' $\overline{ab}$, and their vectors extended intersect at point $v = (x, y)$). Let $M_A$ be the max x-coord of $A$, and let $m_B$ be the min x-coord of $B$. There is a region between $M_A$ and $m_B$:
+                \begin{enumerate}
+                    \item $x < M_A$ and $x < m_B$ ($x$ is to the left of the region), then no points on the left subchain of $A$ including $a$ can be a bridge point. Remove those points.
+                    \item $x > m_B$ and $x > M_A$ ($x$ is to the right of the region), then no points on the right subchain of $B$ including $b$ can be a bridge point. Remove those points.
+                    \item $M_A < x < m_B$ ($x$ is in the region), then no points on the left subchain of $A$ including $a$ and no points on the right subchain of $B$ including $b$ can be a bridge point. Remove those points.
+                \end{enumerate}
+                \item Only $\overline{b\ b_l}$ falls below $\overline{ab}$ $\longrightarrow$ discard the right subchain in $A$ and $B$.
+                \item Only $\overline{a\ a_r}$ falls below $\overline{ab}$ $\longrightarrow$ discard the left subchain in $A$ and $B$.
+            \end{enumerate}
+        \end{itemize}
+
+    %%%%%%%%%
 
 
     %%%
@@ -452,105 +730,7 @@
     % END %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 
-    \section{Hello World}
-    \label{sec:hello} % section label
-                      % to link sections within file, 
-                      % do \hyperref[label]{text}
-        Link to \hyperref[sec:figures]{Figures section}
-
-\cbcolor{dkgreen}
-\cbstart
-\begin{lstlisting}
-(; This is a comment. ;)
-
-(; This is a 
-   multi-lined comment. ;)
-\end{lstlisting}
-\cbend
-
-
-        \subsection{Fonts and Styles:}
-            \begin{itemize}
-                \item hello world
-                \item \lstinline!world world!
-                \item \sf{hello world}
-                \item \textsc{Hello World}
-                \item $\Theta(n)$
-            \end{itemize}
-
-        \subsection{Enum List Style:}
-            \begin{enumerate}[label=(\alph*)]
-                \item One
-                \item Two
-                \item Three
-            \end{enumerate}
-
-        \subsection{A basic Table:}
-            \begin{center}
-                \begin{tabular}{||cc||}
-                    \hline
-                    hello & world \\
-                    \hline
-                \end{tabular}
-            \end{center}
-
-        \subsection{Figure}
-        \label{sec:figures}
-            Basic single figure (commented out):
-            % \begin{figure}[h]
-            %     \centering
-            %     \includegraphics[width=0.7\linewidth]{FILE_PATH}
-            %     % \caption{}
-            %     \label{fig:FILE_NAME}
-            % \end{figure}
-
-            Code environment:
-\begin{lstlisting}[stepnumber=0]
-int main() {
-    cout << "Hello World" << endl;
-}
-\end{lstlisting}
-
-            One way to put code side-by-side:
-
-\begin{tabular}{l|l}
-\hline
-\begin{minipage}[h]{0.5\textwidth}
-    \begin{lstlisting}[stepnumber=0]
-    <animal.h>= // C++
-    class Animal {
-    ...
-    };
-    \end{lstlisting}
-\end{minipage}
-&                  % remember  '&' between cells in a row
-\begin{minipage}[h]{0.5\textwidth}
-    \begin{lstlisting}[stepnumber=0]
-    <animal.cpp>= // C++
-    ...
-    \end{lstlisting}
-\end{minipage} \\ % remember '\\' at the end of each row
-\hline
-\end{tabular}
-
-                One way to align multiple (2) figures in a row:
-                % \begin{figure}[h]
-                %     \centering
-                %     \begin{tabular}{cc}
-                %         \begin{subfigure}{.5\textwidth}
-                %             \centering
-                %             \includegraphics[width=1\textwidth]{FILE_PATH1}
-                %             \label{fig:FILE_NAME1}
-                %         \end{subfigure} &
-                %         \begin{subfigure}{.5\textwidth}
-                %             \centering
-                %             \includegraphics[width=1\textwidth]{FILE_PATH2}
-                %             \label{fig:FILE_NAME2}
-                %         \end{subfigure}
-                %     \end{tabular}
-                %     \label{fig:MULTI_NAME}
-                % \end{figure}
-
+   
     %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
     \begin{thebibliography}{1}
         \bibitem[1]{berg08}Mark de Berg, Otfried Cheong, Marc van Kreveld, and Mark Overmars. 2008. Computational Geometry: Algorithms and Applications (3rd ed. ed.). Springer-Verlag TELOS, Santa Clara, CA, USA.
