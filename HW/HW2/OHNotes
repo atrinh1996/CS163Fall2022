@@ -1,0 +1,45 @@
+1d. dynamic algo. us a bbst
+
+all points are leaves. calculate maxima of the pairs or leaeves and store solution in parent nodes, and keep going up. To insert and delete a new leaf should be log n. in worst case bbst still gives us log n time to insert and delete, the merge step like any d&C is n. 
+
+D&C is similar, but it would be n log in to insert and delete new points. 
+
+worst case space complexity is O(n h), where h is the height. in bbst h = log n. 
+
+
+1e. still n log n, worst case. there are log n divisions. on L and R side across median, take tallest R side point O(n). eliminate the points the R max dominates. Recurse on the L side by dividing it. and the R of R side. 
+
+- find max oy on R
+- find and elim all pts less than the x of the max y
+- recurse. 
+
+3b. in order, store all the vectors, and angles from one vector to another. there are special angles of monotonicity, where the vector from upper goes to lower, and lower to upper. The goal is to count the times we cross over these angles of monotonicity, and a monotone will only cross over twice,
+
+n^2 time for non mono polygons
+
+transform polygon so the line of monotonicity is the x axis. count the times vectors cross over the y axis. 2 for monotone.
+
+since we are translating to the origin, we can do it in such a way that x axis becomes monotone line.
+
+4. start with intersection btwn two convex hulls. 
+
+simple polygon doesnt have to be convex. so that's where the interior regions come int when we calculate the convex hull. 
+
+doubly connected edge list. 
+
+n time to find the sub polygons when we toss out the edges that don't intersect. The problem can decompose to finding the convex hull of two intersecting convex polygons. This is like an edge exists when there is an intersection between the two polygons. 
+
+rotational sweep line from a random interior point.
+
+linear because we check all points once, and can check in constant time for intersection of the edges. 
+
+intersection between convect polygons must be the intersections between edges of the two polygons.
+
+status ds will store the edges of the current points we are looking at. we go for constant storage space. 
+
+
+
+
+
+
+
