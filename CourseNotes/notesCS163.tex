@@ -220,7 +220,7 @@
             \begin{tabular}{|p{3cm}|p{3.5cm}|p{2cm}|p{2cm}|p{2cm}|p{2.25cm}|}
                 \hline
                 \hline
-                \textbf{TOPIC/type} & \textbf{Name} & \textbf{Best} & \textbf{Average} & \textbf{Worst} & \textbf{Amortized} \\ 
+                \textbf{TOPIC/type} & \textbf{Name} & \textbf{Best} & \textbf{Average} & \textbf{Worst} & \textbf{Space} \\ 
                 \hline
                 \hline
                 \hyperref[sec:convexhull]{\textbf{Convex Hull}} & & $\Omega(n)$ & & $O(n^4)$ &  \\
@@ -239,6 +239,16 @@
                 \hline
                 order decomp & \hyperref[subsec:dynamichull]{Dynamic Convex Hull} & $\Omega(\log^2 n)$ & $\Theta(\log^2 n)$ & $O(\log^2 n)$ & \\
                 \hline
+                \hyperref[]{\textbf{Intersecting Points}} & & $\Omega(?)$ & & $O(n^2)$ &  \\
+                \hline
+                & Naive (test every segment for intersections with each other) & $\Omega(n^2)$ & $\Theta(n^2)$ & $O(n^2)$ & \\
+                \hline
+                & Plane Sweep (sweep line) & $\Omega(?)$ & $\Theta(?)$ & $O(?)$ & \\
+                \hline
+                \hline
+                & Name & $\Omega(n \log n)$ & $\Theta(n \log n)$ & $O(n \log n)$ & \\
+                \hline
+                & Kirkpatrick's Hierarchical Search && $\Theta(n \log n)$ &  & $O(n)$\\
                 & & & & & \\
                 \hline
                 & Name & $\Omega(n \log n)$ & $\Theta(n \log n)$ & $O(n \log n)$ & \\
@@ -729,8 +739,107 @@
     \pagebreak
     % END %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
+    % INTERSECTING POINTS %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+    \section{Intersecting Points}
+    Covered in \cite{berg08} CH. 2-3, 6
 
+    HW 2
+
+    \subsection{Intro to Intersecting Points}
+        \begin{itemize}
+            \item Naively find intersecting points of a set $S$ of $n$ line segments is for each segment $s \in S$, find its intersections with all other segments $q \in S$. $O(n^2)$.
+            \item We want \emph{output sensitive} or \emph{intersection sensitive} algorithms. 
+            \item \textbf{Plane sweep algorithms}: 
+                \begin{itemize}
+                    \item Uses \emph{status} DS to keep track of lines that currely intersect. It updates when we change the sweep line. The updates happen at \emph{event} or \emph{stopping points}, also kep in a DS. At a stopping point, algorithm updates the status of sweep line, and perform intersection tests. At a point on a line, the start of it when we add it to the status, calculate the intersections of the  line against those lines already in the status DS. Currently, this algorithm is \emph{not} output sensitive.
+                    \item Improvements: Only test for intersections on the line with its neighbor lines (at most, test current line against two other lines). This also \emph{orders} the segments in the status DS, so we are delivering the intersection points in order, as well. Stopping point DS now also includes intersection points.  
+                \end{itemize}
+            \item Special cases to think about later:
+                \begin{itemize}
+                    \item overlapping lines
+                    \item more than two lines intersect at one point 
+                    \item line segment has a slope matching the sweeping lstinline
+                \end{itemize}    
+
+            \item 
+        \end{itemize}
+
+    %%% 
+    \subsection{\textbf{Algorithm} Intersections: Plane Sweep}
+        \begin{itemize}
+            \item Let two lines $\overline{a_0 a_1}$ and $\overline{b_0 b_1}$ intersect at a point $p$. 
+            
+            \begin{itemize}
+                \item Using the sweep line method, there is an event/stopping point \emph{before} $p$ that reveals $\overline{a_0 a_1}$ and $\overline{b_0 b_1}$ are adjacent and therefore get tested for intersection. We are specifically at a point of the sweep line such that i there are no other event points on the sweep line or between the it and the line given by the line's slope and point $p$. When $A$ and $B$ are not yet adjacent, this is when the sweep line is above all the segments, so there is nothing in the status DS. So ther must be an event point $q$ when $A$ and $B$ become adjacent and are tested for intersection.
+            \end{itemize}
+
+            \item Stopping points shall include endpoints AND the intersections points calculated along the way that are to the sweeping direction of the sweeping line (no looking backwards at points already detected). 
+            \item The status DS shall maintain the ordered sequence of segments that the sweeping line intersects (the stabbing points of sweep line $\ell$).
+            \item At a halting point, algorithm must update the status DS and find intersections (if any new). 
+            
+                \begin{itemize}
+                    \item Example (first Endpoint Event): Suppose $s_i$ and $s_k$ are adjacent. The next event is a new line's endpoint of $s_j$. Updating status reveals that $s_j$ is adjacent to $s_i$ and $s_k$. We see that $s_j$ and $s_i$ have an intersecting point, $p$. So we make $p$ a new stopping point. Then move on to next event point. 
+                    \item Example (Intersection point event): This is when two lines that intersect cross, so their ordering in the status DS changes. Both shall get at most one new neighbor, for which new intersections must be calculated. Let these be adjacent in order: $s_j\ s_k\ s_l\ s_m$. Let the current event be the intersection of $s_k\ s_l$. $s_k\ s_l$ must switch order, and the new intersections, if any, between new neighbors, $s_j\ s_l$ and $s_k\ s_m$, are calculated and added to the stopping point DS. This can be done if lines were previously found to be adjacent before. 
+                    \item Example (second Endpoint Event): Suppose the status order of lines $j\ k\ l$, $k$ is adjacent to its neighbors $j$ and $l$. We reach event of the second endpoint of $k$ (so $k$ shall be leaving status DS). This means $j$ and $l$ will be neighbors and thier intersections gets calculated and put in stopping point DS. 
+                \end{itemize}
+            
+            \item \textbf{Invariant}: All intersection points behind the sweep line have been computed correctly. 
+            \item \textbf{Data Structures}:
+            
+                \begin{itemize}
+                    \item \textbf{Stopping Point/Event Point}: Using an event queue or a modified Balanced Binary Search Tree. Ordering will depend on how the $\ell$ sweeps. If $\ell$ is vertical and sweeps along the x-direction, then order by x-coord, and pick the point with the smaller y-coord if two events share the same x. Likewise, if $\ell$ is horizontal and sweeps down the y-direction, then order by y-coord, and pick the point with the smaller x-coord if two points have the same y. Fetching next event and inserting new even is $O(\log m)$ time where $m$ is the number of events. This lets us test whether an event is already in the BBST. During creation (initialization is $O(n\log n)$ for a BBST), we fill the stopping point DS with just endpoints. For each starting endpoint, we store its segment with it. The algorithm runs every time we pop a new event odd and handle it, and runs until the event queue is empty. \emph{See page 26 of \cite{berg08} for full detail on handling all kinds of event points, including degenerates.} 
+                    \item \textbf{Status SD}: Using a BBST, which must be dynamic to deal with line segments going in an out as they intersect or stop intersecting $\ell$. The actual ordering will be in the leaves of the BBST. Each update and neighbor operation takes $O(\log n)$
+                \end{itemize}
+            
+            \item Runtime is $O((n + k)\log n)$, where $n$ is the number of segments in the input set, and $k$ is the size of output (we can specify number of intersections, which doesn't double count when more than 2 segments intersects at a common point). 
+            \item Status DS is $O(n)$ space. Stopping point DS is $O(n + I)$ space, where $I$ is number of intersections. It may actually be $O(n)$ if we remember to remove intersection points when segments are no longer adjacent, as the intersections will go back in again if they have not been report and their segments become adjacent again later.
+        \end{itemize}
+        \pagebreak
+    %%%%%%%%%%%%%%%%%%%%%%%
+
+    %%%%%%%%%%%%%%%%%%%%%%%
+    \subsection{Doubly Connected Edge List}
+        \begin{itemize}
+            \item DCEL contains a record for each face, edge, and vertex of a planar subdivision. (In application, it is useful for these records to also contain attribute information, such as what is in a given face.)
+        \end{itemize}
+    \pagebreak
+    %%%%%%%%%%%%%%%%%%%%%%%
+
+    %%%%%%%%%%%%%%%%%%%%%%%
+    \section{Polygon Triangulation}
+    See CH. 3 of \cite{berg08}
+
+    HW 2
+
+    \subsection{Art Gallery Problem with 3-coloring Approach - $O(n\log n)$}
+        \begin{itemize}
+            \item For triangulation of the polygon, it should deliver a DCEL, which allows for constant time stepping into another triangle/face of the triangulated polygon. This should be $O(n\log n)$ time.
+            \item Depth-first search can be used to compute the 3-coloring of the vertices of all the triangles, which should take $O(n)$ time.
+            \item There are at most $\floor*{n / 3}$ camera placements to find in a polygon of $n$ vertices. The worst case being the comb-shaped polygon.
+        \end{itemize}
+    \pagebreak
+    %%%%%%%%%%%%%%%%%%%%%%%
+
+    %%%%%%%%%%%%%%%%%%%%%%%
+    \subsection{Triangulation: Partitioning a Polygon into Monotone Pieces}
+
+        \begin{itemize}
+            \item $O(n^2)$ if we take $O(n)$ for each vertex to find a proper diagonal to make a triangle. 
+            \item $O(n)$ is we know polygon is convex, so we simply take the segments from one vertex to all other vertices, and we have our triangulation.
+            \item Potential but hard strategy is to decompose the polygon into convex polygons and triangluate the sub-convex-polygons. However, we instead take an easier strategy: Decompose the polygon into monotone pieces, and triangulate those. 
+            
+                \begin{itemize}
+                    \item Partition into (y-)Montone pieces with diagonals: When walking from the topmost to bottomost vertices, we detect the direction we are going, namely dowards. A turn vertex is when the direction changes. So at that vertex, if the two incident edges of the turn vertex lie below it and the interior of the polygon above it, then the diagnonal for $v$ must be above $v$. Likewise, if the two incident edges of $v$ lie above $v$, then the diagonal should be below $v$. See page 50 in \cite{berg08}
+                \end{itemize}
+
+        \end{itemize}
+    \pagebreak
+    %%%%%%%%%%%%%%%%%%%%%%%
+    
+    % END %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
    
+
+    \pagebreak
     %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
     \begin{thebibliography}{1}
         \bibitem[1]{berg08}Mark de Berg, Otfried Cheong, Marc van Kreveld, and Mark Overmars. 2008. Computational Geometry: Algorithms and Applications (3rd ed. ed.). Springer-Verlag TELOS, Santa Clara, CA, USA.

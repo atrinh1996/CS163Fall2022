@@ -13,7 +13,9 @@ worst case space complexity is O(n h), where h is the height. in bbst h = log n.
 - find and elim all pts less than the x of the max y
 - recurse. 
 
-3b. in order, store all the vectors, and angles from one vector to another. there are special angles of monotonicity, where the vector from upper goes to lower, and lower to upper. The goal is to count the times we cross over these angles of monotonicity, and a monotone will only cross over twice,
+3b.ken supowisks
+
+ in order, store all the vectors, and angles from one vector to another. there are special angles of monotonicity, where the vector from upper goes to lower, and lower to upper. The goal is to count the times we cross over these angles of monotonicity, and a monotone will only cross over twice,
 
 n^2 time for non mono polygons
 
@@ -38,7 +40,17 @@ intersection between convect polygons must be the intersections between edges of
 status ds will store the edges of the current points we are looking at. we go for constant storage space. 
 
 
+- Find the intersections of convex hull of P1 and P2. O(n). Let Q be this new polygon, and find Q;s intersection with P1.
+2. use edges of Q to subdivide the DCEL. Walk boundry of Q, and if you cross a triangle, you will insert a new local insertion of faces and edges and vertices. There is a linear number of insertsiosn. Label the faces as being bg, -bg, X-g (in or out label). Keep all the bg faces if the bg is adjacen to a -bg or b-g Done have to re-triangluate the quadrilaterals, so this is a linear step.
+3. walk around Q. pick legal edges. 
 
+- intersection of two convex hulls. we hace the intersecitons points ahead. 
+- trim off all "exterior" regionsn not in potential intersection. 
+- Find All the green (P2) intersection points. Keep those intersections where red and blue separate. or just blue on both sides. 
+
+
+- walk along P2, and hit the intersection of the tirangle edges of P1
+- flag when we flip to a new face. if its an interior face, we are keeping the edge cuz its inside. If we flip to an exterior triancgle face, note that we keep the edge on the side of the interior, and stop recording from this point on until we flip faces back to interior again. 
 
 
 
