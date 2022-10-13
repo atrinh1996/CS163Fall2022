@@ -64,7 +64,7 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 \begin{document}
-\doheading{2}{title}{HW 1}
+\doheading{2}{title}{HW 1} 
 % \htitle{Homework 1}
 % \bigskip 
 % \bigskip 
@@ -81,7 +81,7 @@
                 \includegraphics[width=0.25\textwidth]{images/1a.PNG}
                 % \caption{}
                 \label{fig:1a}
-            \end{figure}
+            \end{figure} 
 
             \item \textbf{Incremental Maxima}: Sort the $n$ distinct (multiple points do not overlap) points of $S$ in descending order by their x-coordinate ($O(n\log n)$). For two points $i, j \in S$, where $i \neq j$, if $i_x = j_x$, then point $i$ comes before $j$ if $i_y > j_y$, and vice versa (order the higher y-coordinate point first). (A) The first point $v$ in the sorted set, $S'$, is trivially in the set of $S$'s maxima, because $v$ has the largest x value (and higher y value against any points with the same x value, which $v$ therefore dominates). Let $m$ be the \emph{latest} maxima found so far, and so, $m_y$ is the current largest y-coordinate; $S'[0]$ is, of course, our first $m$. Checking each point in $S'$ in order, (B) if the current $p$ has a $p_y > m_y$ seen so far, then add $p$ to the set of maxima and make $p$ the new $m$, because our $S'$ ordering has $p_x \leq m_x$, so $m$ doesn't dominate $p$. (C) If the current $p_y \leq m_y$, reject it from the maxima set; since we ordered $S'$ by descending x-coordinate, $p_x \leq m_x$ ($p_y < m_y$ if $p_x = m_x$), $p$ is dominated by $m$. This part of the algorithm runs $O(n)$ time and correctly computes all the maxima of $S$. Space complexity may be $O(1)$ if we sort in place and toss out the points of $S'$ that are not rejected. Overall runtime is $O(n\log n)$ due to preprocessing.
             
@@ -110,13 +110,66 @@
             Since we can have $O(\log n)$ of these recursions, the overall runtime is $O(n\log n)$. Space complexity is $O(1)$.
         \end{enumerate}
         
-    % \pagebreak
+    \pagebreak
     % END %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
     
     %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
     \section{Line Sweep and Augmented Data Structures}
     \label{sec:two}
+
+    Let there be a set $S$ of $n$ disjointed triangles. I have the three vertices of each triangle $t \in S$, as well as their edges. I also have a ``top'' and ``bottom'' edge described by $(x_\text{min} - 1, y_\text{max} + 1), (x_\text{max} + 1, y_\text{max} + 1)$ and $(x_\text{min} - 1, y_\text{min} - 1), (x_\text{max} + 1, y_\text{min} - 1)$, respectively, that partially ``box'' our triangles in a space. These top and bottom edges are perpendicular to the vertical line sweep $\ell$ that sweeps from left to right along the x-axis. I describe a line sweeping method of finding the bridges described in the problem.
+        \begin{itemize}
+            \item \textbf{Status Data Structure}: A balance binary search tree of edges, where each edge knows the current vertex it ``sees'' at the current point of a sweep. The sweep line $\ell$ starts at the leftmost part of the plane, so only top and bottom edges are inserted into Status, and neither currently see any vertices. Since this is a BBST, insertion and deletion of edges into it will take $O(\log n)$ time. 
+            
+            % I will show later there is a constant number of these updates to Status, at each vertex visited in Stopping Point, then the algorithm overall runs $O(n\log n)$ time.
+
+            \item \textbf{Stopping Point (SP) Data Structure}: A BBST of vertices of all the triangles of $S$, sorted by x-coordinate. Again, sorting takes $O(n\log n)$ time. In a sweep lining algorithm, I visit each point of the set once. 
+            
+            % where there can be a constant number of edge updates ($O(\log n)$) in Status.
+
+            \item \textbf{Invariant}: At a current point of the sweep, all bridges to the left of $\ell$ that were found are valid, and all edges in Status currently point to the last vertex they ``see'' in the algorithm. Status only contains edges that $\ell$ intersects.
+            
+            %%% FIX THIS DEFINITION
+            And edge sees a vertex if, at a stage that $\ell$ intersects this vertex, the edge is intersected by $\ell$ and is adjacent to the vertex (there are no edges between this exdge and the vertex). 
+        \end{itemize}
+
+        While SP is not empty:
+        \begin{enumerate}
+            \item Pop a vertex $v$ off of SP. 
+            \item If the edges of $v$ are not in Status, add them edge to status and mark that they see $v$ ($O(\log n)$). 
+            \item For edges already in Status (i.e. intersected by $\ell$) and it sees a different vertex, update it in status such that the vertex that edge sees is now $v$ ($O(\log n)$). 
+            
+            There is a constant number of these edge updates at a vertex, because
+            
+            \begin{enumerate}
+                \item  A vertex's own 2 edges always sees it,
+                \item an edge on the triangle of the vertex but doesn't contain the vertext and is intersected by $\ell$ directly above or below $v$ would ``see'' $v$ from inside the triangle; *it would already be in Status because it would have been added at a vertex that appeared before $v$,
+                \item top and bottom edges \emph{may} also see $v$ since $\ell$ should always intersect top and bottom, 
+                \item and at most two edges from other triangle(s) can also see $v$, given that all triangles are disjointed and Status only keeps current edges. Any other additional triangle edges with overlapping x-coordinates would not see $v$ because there is another edge in the way, and those edges with non-overlapping x-coordinates would either already been in and then discarded from Status, or they have not yet been swept and never been in Status.
+            \end{enumerate}
+
+            Therefore, for $n$ vertices, where are $O(n\log n)$ to process these vertices.
+
+            \item If, at $v$, two edges in Status were updated to point to $v$, but they were \emph{both} previously pointing to the same vertex $w$, then that means a bridge can be formed between $v$ and $w$. This means there were no other triangles or edges between $v$ and $w$ that a potential bridge could intersect. Some exceptions:
+            
+                \begin{itemize}
+                    \item Checking in constant time, if both vertices belong to the same triangle, that is not a bridge you report. 
+                    \item When the vertices belong to different triangles, checking in constant time, if 1 a bridge between the the two triangles already exist, then don't report $\overline{vw}$,
+                    \item If we already have $n-1$ bridges, it is not necessary to report $\overline{vw}$.
+                \end{itemize}
+            
+                Report the bridge for $\overline{vw}$, otherwise.
+            
+            
+            
+            \item If $v$ is the rightmost point of a triangle, then remove the three edges of the triangle from Status in $O(\log n)$ time.
+            \item Repeat at the next stopping point. 
+        \end{enumerate}
+
+        Sorting takes $O(n\log n)$ time, visiting each vertex is $O(n)$ time, and processing $n$ vertices each take $O(\log n)$ time for overall $O(n\log n)$ time. Therefore the algorithm takes $O(n\log n)$. Space complexity is $O(n)$ for the SP, and also linear in worst case if all triangles were vertically aligned. 
+
+    \footnote{Jake walked through a correct algorithm for finding these bridges; with Alex and Stephanie.}
 
         
     \pagebreak
