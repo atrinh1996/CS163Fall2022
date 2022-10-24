@@ -100,18 +100,30 @@
     \begin{enumerate}[label=\alph*.]
         \item $O(n^3)$ algorithm: For every triple $i, j, k\in S$, a triangle can be formed and it's area calculated in constant time. Report the smallest area found. There are $O(n^3)$ possible triples.
         
-        \item Given $\overline{p_1 p_2}$, we can calculate its y-intercept $b$ and slope $m$. For all the other $n-2$ point $p_i\in S$, use $m$ to calculate the y-intercept $b_i$ given by the line characterized by $p_i$ and $m$. For each of those $n-2$ points, calculate the absolute difference $|b - b_i|$; we can then order these points by increasing value of this absolute difference. The point that forms the smallest area triangle with $\overline{p_1 p_2}$ is the one with the smallest absolute difference, i.e. the ``closest'' point to the line. Since triangle area is given by $\frac{1}{2} \times $ base $\times$ height, and all these triangles have the same base, $\overline{p_1 p_2}$, the height will determine who has the smallest area. The height will be given by the shortest distance from $p_i$ to $\overline{p_1 p_2}$, so the smallest height is given by that closest $p_i$.
+        \item Given $\overline{p_1 p_2}$, we can calculate its y-intercept $b$ and slope $m$. For all the other $n-2$ point $p_i\in S$, use $m$ to calculate the y-intercept $b_i$ given by the line characterized by $p_i$ and $m$. For each of those $n-2$ points, calculate the absolute difference $|b - b_i|$; we can then order these points by increasing value of this absolute difference. The point that forms the smallest area triangle with $\overline{p_1 p_2}$ is the one with the smallest absolute difference, i.e. the ``closest'' point to the line (Fig. \ref{fig:2b}). Since triangle area is given by $\frac{1}{2} \times $ base $\times$ height, and all these triangles have the same base, $\overline{p_1 p_2}$, the height will determine who has the smallest area. The smallest height is the length of the line perpendicular to $\overline{p_1 p_2}$ and includes the closest $p_i$. In the example of Fig. \ref{fig:2b}, point $j$ is the closest, as determined by its vertical distance (i.e. absolute difference in y-intercepts) from $\overline{p_1 p_2}$; it clearly gives the smallest height compared to the other points, and therefore yields the minimum area triangle with $\overline{p_1 p_2}$.
         
 
-        \item $o(n^3)$ duality and line sweeping algorithm: We can use Edelsbrunner, Welzl (1986) algorithm for LMSR that runs in $O(n^2 \log n)$ time and uses $O(n)$ space. For every point $p\in S$ given by $(p_x, p_y)$, create it's dual, $y = p_x\ x + p_y$. There are $O(n^2)$ stopping points we visit, given by the number of intersections in the dual; recall that an intersection in this dual represents the line segment in the primal that connects the two points that created the intersection in the dual. Using the status array, it will take $O(1)$ time to find the closest point (jump of 1) and calculate the area given by the two primal points that created the intersection in the dual, and the third point in the primal that gave us the closes line to this intersection point in the dual. This distance is preserved from the primal of the vertical distance from this third point to the segment. So from part b, we want to maintain only the triple that creates the smallest vertical distance from our sweeping. And finally, since the stopping data structure is a heap, it takes $O(\log n)$ to get to the next point in the sweep, so total runtime is $O(n^2 \log n)$. Space is $O(n)$ if we only maintain the stop points to the right of the sweep line and that are only those intersections of just current adjacent lines in the current sweep.\footnote{Jake helped clarified this algorithm i noffice hours.}
-        
+        \begin{figure}[h]
+            \centering
+            \includegraphics[width=0.7\textwidth]{images/2b.PNG}
+            \caption {}
+            \label{fig:2b}
+        \end{figure}
+
         \pagebreak
+
+        \item $o(n^3)$ duality and line sweeping algorithm: We can use Edelsbrunner, Welzl (1986) algorithm for LMSR that runs in $O(n^2 \log n)$ time and uses $O(n)$ space. For every point $p\in S$ given by $(p_x, p_y)$, create it's dual, $y = p_x\ x + p_y$. There are $O(n^2)$ stopping points we visit, given by the number of intersections in the dual; recall that an intersection in this dual represents the line segment in the primal that connects the two points that created the intersection in the dual. Using the status array, it will take $O(1)$ time to find the closest point (jump of 1) and calculate the area given by the two primal points that created the intersection in the dual, and the third point in the primal that gave us the closes line to this intersection point in the dual. This distance is preserved from the primal of the vertical distance from this third point to the segment. So from part b, we want to maintain only the triple that creates the smallest vertical distance from our sweeping. And finally, since the stopping data structure is a heap, it takes $O(\log n)$ to get to the next point in the sweep, so total runtime is $O(n^2 \log n)$. Space is $O(n)$ if we only maintain the stop points to the right of the sweep line and that are only those intersections of just current adjacent lines in the current sweep.\footnote{Jake helped clarified this algorithm in office hours.}
+        
+        % \pagebreak
 
         \item We can use the topological sweep algorithm in arrangement given Edelsbrunner, Guibas (1987), which has $O(n^2)$ time and $O(n)$ space because we are sweeping with a topological line, rather than with one that is always vertical. This paper also address solving the minimum area triangle problem with this topological sweep.
         
-        Per Edelsbrunner, Guibas, at an elementary step, we are crossing over a vertex in the dual that represents a segment between two points in the primal. At this point in the algorithm, we know the vertex we just passed, the updated horizon tree gives us the the two edges that the topological line currently cuts, and the other two points of the region we entered can be calculated in constant time, because they are just the right endpoints of the two edges. No other edges should intersect the current region since the horizon is updated as such. With all this information, the area of the current region can be calculated and will correspond to the area given by the triangle of the three points in the primal that were transformed to the three lines that made the edge of the region. If the current triangle area is smaller than the current minimum area calculate, we update current minimum and continue the sweep. We report the final minimum area triangle and its three points in the end. 
+        Per Edelsbrunner, Guibas, at an elementary step, we are crossing over a vertex in the dual that represents a segment between two points in the primal. At this point in the algorithm, we know the vertex we just passed, the updated horizon tree gives us the the two edges that the topological line currently cuts, and the other two points of the region we entered can be calculated in constant time, because they are just the right endpoints of the two edges. No other edges should intersect the current region since the horizon is updated as such. With all this information, the area of the current region can be calculated and will correspond to the area given by the triangle of the three points in the primal that were transformed to the three lines that made the edge of the region. If the current triangle area is smaller than the current minimum area calculate, we update current minimum and continue the sweep. We report the final minimum area triangle and its three points in the end.\footnote{Jake went over possible modifications and the paper for this algorithm} 
        
     \end{enumerate}
+
+
+    
 
     % \footnote{Jake walked through a correct algorithm for finding these bridges; with Alex and Stephanie.}
 
@@ -159,8 +171,10 @@
 
 
     %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-    % \section{Project}
-    % \label{sec:four}
+    \section{Project}
+    \label{sec:four}
+
+    I emailed Diane about a project on line sweeping.
 
     % \begin{enumerate}[label=\alph*.]
     %     \item 
@@ -185,6 +199,7 @@
 \begin{thebibliography}{1}
     \bibitem[1]{officehours}Jake and Diane's office hours, classmates: Stephanie, Alex, Anju with homework problem discussions.
     \bibitem[2]{berg08}Mark de Berg, Otfried Cheong, Marc van Kreveld, and Mark Overmars. 2008. Computational Geometry: Algorithms and Applications (3rd ed. ed.). Springer-Verlag TELOS, Santa Clara, CA, USA.
+    \bibitem[3]{edelwel}H. Edelsbrunner and L.J Guibas, \href{https://www.sciencedirect.com/science/article/pii/002200008990038X}{``Topological Sweep an Arrangement''}. Journal of Computer and System Sciences. 38:164-194. 1989.
 \end{thebibliography}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \end{document}
