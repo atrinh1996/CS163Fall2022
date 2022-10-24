@@ -15,6 +15,7 @@
 \usepackage{caption}
 \usepackage{subcaption}
 \usepackage[color, leftbars]{changebar}
+\usepackage{mathrsfs}
 
 % Important Configurations
 
@@ -217,7 +218,7 @@
     \label{sec:allalgo}
 
         \begin{center}
-            \begin{tabular}{|p{3cm}|p{3.5cm}|p{2cm}|p{2cm}|p{2cm}|p{2.25cm}|}
+            \begin{tabular}{|p{2.5cm}|p{3cm}|p{3cm}|p{2cm}|p{2cm}|p{2.25cm}|}
                 \hline
                 \hline
                 \textbf{TOPIC/type} & \textbf{Name} & \textbf{Best} & \textbf{Average} & \textbf{Worst} & \textbf{Space} \\ 
@@ -225,33 +226,44 @@
                 \hline
                 \hyperref[sec:convexhull]{\textbf{Convex Hull}} & & $\Omega(n)$ & & $O(n^4)$ &  \\
                 \hline
-                incremental & \hyperref[subsec:chn4]{Naive Approach (Triples)} & $\Omega(n^4)$ & $\Theta(n^4)$ & $O(n^4)$ & \\
+                incremental & \hyperref[subsec:chn4]{Naive Approach (Triples)} & $\Omega(n^4)$ & $\Theta(n^4)$ & $O(n^4)$ & $O(n)$ \\
                 \hline
-                incremental & \hyperref[subsec:slowhull]{Slow $\mathcal{CH}$ (Pairs)} & $\Omega(n^3)$ & $\Theta(n^3)$ & $O(n^3)$ & \\
+                incremental & \hyperref[subsec:slowhull]{Slow $\mathcal{CH}$ (Pairs)} & $\Omega(n^3)$ & $\Theta(n^3)$ & $O(n^3)$ & $O(n)$ \\
                 \hline
-                incremental & \hyperref[subsec:giftwrapping]{Jarvis March(Gift Wrapping)} & $\Omega(n h)$ & $\Theta(n \log n)$ & $O(n^2)$ & \\
+                incremental & \hyperref[subsec:giftwrapping]{Jarvis March(Gift Wrapping)} & $\Omega(n h)$ & $\Theta(n \log n)$ & $O(n^2)$ & $O(n)$ \\
                 \hline
-                incremental & \hyperref[subsec:gscan]{Graham Scan} & $\Omega(n \log n)$ & $\Theta(n \log n)$ & $O(n \log n)$ & \\
+                \hyperref[subsec:chinc]{incremental} & \hyperref[subsec:gscan]{Graham Scan} & $\Omega(n \log n)$ & $\Theta(n \log n)$ & $O(n \log n)$ & $O(n)$ \\
                 \hline
-                D\&C& \hyperref[subsec:quickhull]{Quick Hull} & $\Omega(n\log n)$ & $\Theta(n \log n)$ & $O(n^2)$ & \\
+                D\&C& \hyperref[subsec:quickhull]{Quick Hull} & $\Omega(n\log n)$ & $\Theta(n \log n)$ & $O(n^2)$ & $O(n)$ \\
                 \hline
                 prune\&search& \hyperref[subsec:ultimatehull]{Marriage before Conquest (Ultimate)} & $\Omega(n \log h)$ & $\Theta(n \log h)$ & $O(n \log h)$ & \\
                 \hline
-                order decomp & \hyperref[subsec:dynamichull]{Dynamic Convex Hull} & $\Omega(\log^2 n)$ & $\Theta(\log^2 n)$ & $O(\log^2 n)$ & \\
+                order decomp & \hyperref[subsec:dynamichull]{Dynamic Convex Hull} (updates) & $\Omega(\log^2 n)$ & $\Theta(\log^2 n)$ & $O(\log^2 n)$ & \\
                 \hline
                 \hyperref[]{\textbf{Intersecting Points}} & & $\Omega(?)$ & & $O(n^2)$ &  \\
                 \hline
-                & Naive (test every segment for intersections with each other) & $\Omega(n^2)$ & $\Theta(n^2)$ & $O(n^2)$ & \\
+                & Naive & $\Omega(n^2)$ & $\Theta(n^2)$ & $O(n^2)$ & $O(n)$ \\
                 \hline
-                & Plane Sweep (sweep line) & $\Omega(?)$ & $\Theta(?)$ & $O(?)$ & \\
+                & Plane Sweep (sweep line) & $\Omega((n + k) \log n)$ & $\Theta(n^2 \log n)$ & $O(n\log n)$ & $O(n)$ \\
+                \hline
+                & Hierarchical Search &  & $\Theta(n \log n)$ & $O(\log n)$ (query) &  $O(n)$ \\
+                \hline
+                & LMSR (naive) & $\Omega(n^4)$ & $\Theta(n^4)$ & $O(n^4)$ &  $O(n)$ \\
+                \hline
+                & LMSR (sweep) & $\Omega(n^2 \log n)$ & $\Theta(n^2 \log n)$ & $O(n^2 \log n)$ &  $O(n)$ \\
+                \hline
+                & Building $\mathscr{A}$ (hammock) & $\Omega(n^2)$ & $\Theta(n^2)$ & $O(n^2)$ &  $O(n^2)$ \\
+                \hline
+                & Topological Sweep & $\Omega(n^2)$ & $\Theta(n^2)$ & $O(n^2)$ & $O(n)$ \\
                 \hline
                 \hline
-                & Name & $\Omega(n \log n)$ & $\Theta(n \log n)$ & $O(n \log n)$ & \\
-                \hline
-                & Kirkpatrick's Hierarchical Search && $\Theta(n \log n)$ &  & $O(n)$\\
-                & & & & & \\
-                \hline
-                & Name & $\Omega(n \log n)$ & $\Theta(n \log n)$ & $O(n \log n)$ & \\
+                % & Name & $\Omega(n \log n)$ & $\Theta(n \log n)$ & $O(n \log n)$ & \\
+                % \hline
+                % & Kirkpatrick's Hierarchical Search && $\Theta(n \log n)$ &  & $O(n)$\\
+                % \hline 
+                % & & & & & \\
+                % \hline
+                % & Name & $\Omega(n \log n)$ & $\Theta(n \log n)$ & $O(n \log n)$ & \\
                 \hline
                 \hline
             \end{tabular}
@@ -259,6 +271,111 @@
 
         \emph{h is the number of points on $\mathcal{CH}$.}
 
+        \emph{Space complexity is Auxilliary Space plus input size}
+
+        \emph{k is the number of intersections, $k \leq n^2$}
+
+    \pagebreak
+    %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+    %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+    \section{CS163 - Topics Overview}
+        \begin{description}
+            \item[Convex Hull] 
+            \item[] 
+            \begin{minipage}[h]{0.33\textwidth}
+                \begin{itemize}
+                    \item[--] Simple Polygons
+                    \item[--] Non-Simple Polygons
+                    \item[--] Monotone Polygons
+                    \item[--] Star-Shape Polygons
+                    \item[--] Augmented Tree 
+                    \item[--] BBST
+                \end{itemize}
+            \end{minipage}
+            \begin{minipage}[h]{0.33\textwidth}
+                \begin{itemize}
+                    \item[--] Left Turn/orientation
+                    \item[--] Support Line 
+                    \item[--] Test for CCW order 
+                    \item[--] Test for convexity
+                    \item[--] Concatenable Queue 
+                    \item[--] Order Decomposable
+                \end{itemize}
+            \end{minipage}
+            \begin{minipage}[h]{0.33\textwidth}
+                \begin{itemize}
+                    \item[--] Divide\&Conquer 
+                    \item[--] Bridge Finding
+                    \item[--] Merge Hulls
+                    \item[--] Maxima
+                    \item[--] Dynamic updates
+                \end{itemize}
+            \end{minipage}
+
+            \begin{tabular}{lll}
+                Algorithm           & time                      & space \\
+                \hline
+                \hline
+                Naive Hull          & $O(n^4)$                  & $O(n)$ \\ 
+                Slow Hull           & $O(n^3)$                  & $O(n)$ \\ 
+                Jarvis March        & $\Omega(nh)/O(n^2)$       & $O(n)$ \\ 
+                Graham Scan         & $O(n\log n)$              & $O(n)$ \\
+                Quick Hull          & $\Omega(n\log n)/O(n^2)$  & $O(n)$\\
+                MBC                 & $O(n\log h)$              & $O(n)$\\
+                Dynamic Hull update & $O(\log^2 n)$             & $O(n\log n)$\\
+            \end{tabular}
+
+
+            \item[Intersecting Points]  
+            \item[] 
+            \begin{minipage}[h]{0.33\textwidth}
+                \begin{itemize}
+                    \item[--] Point inclusion
+                    \item[--] Status DS 
+                    \item[--] Stopping point DS 
+                    \item[--] DCEL
+                    \item[--] Arrangement, $\mathscr{A}(S)$
+                    \item[--] Least Median Square Regression 
+                \end{itemize}
+            \end{minipage}
+            \begin{minipage}[h]{0.33\textwidth}
+                \begin{itemize}
+                    \item[--] Regularization
+                    \item[--] Monotonization
+                    \item[--] Triangulating 
+                    \item[--] Hierarchical 
+                    \item[--] Planar Subdivisions
+                    \item[--] Topological Sweep
+                    \item[--] UHT and LHT 
+                    \item[--] Ready Stack
+                \end{itemize}
+            \end{minipage}
+            \begin{minipage}[h]{0.33\textwidth}
+                \begin{itemize}
+                    \item[--] $v = n$
+                    \item[--] $face \leq 2n - 4$
+                    \item[--] $edges \leq 3n - 6$
+                    \item[--] Total degrees $\leq 6n - 12$
+                    \item[--] Line Sweep
+                    \item[--]
+                \end{itemize}
+            \end{minipage}
+            
+            \begin{tabular}{lll}
+                Algorithm           & time                      & space \\
+                \hline
+                \hline
+                Line segment intersection (naive) & $O(n^2)$ & $O(n)$ \\
+                Line Sweep      & $\Omega((n + k) \log n)/O(n^2 \log n)$   & $O(n)$ \\
+                % Line Sweep (BBST)       & $O((n + k) \log n)$   & $O(n)$ \\
+                LMSR (naive)            & $O(n^4)$              & $O(n)$ \\ 
+                LMSR (vertical sweep)   & $O(n^2 \log n)$       & $O(n)$ \\ 
+                Build $\mathscr{A}(H)$: hammock  & $O(n^2)$              & $O(n^2)$ \\
+                Topological Sweep       & $O(n^2)$              & $O(n)$ \\
+            \end{tabular}
+
+        \end{description}
     \pagebreak
     %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
@@ -349,6 +466,7 @@
 
     \begin{itemize}
         \item The computation of \textbf{planar convex hull} was one of the first computational geomtry problems. 
+        \item Convexity is important for issues involving point location and intersection detection, all of which have real world applications.
         \item \emph{Convexity 1}: A subset $S$ of the plane is \textbf{convex} if and only if for any pair of points $p, q \in S$, the line segment $\overline{pq}$ is completely contained in $S$. See Fig. \ref{fig:convexhull1}. The \emph{convex hull}, $\mathcal{CH}(S)$, of a set $S$ is the smallest convex set that contains $S$; it is the intersection of all convex sets that contain $S$. 
         \item \emph{Convexity 2}: How to compute the convex hull of a finite set $P$ of $n$ points in the plane? The area enclosed in the shaded region is the convex hull of $P$. See Fig. \ref{fig:convexhull2}. It is the unique convex polygon whose vertices are points from $P$.
     \end{itemize}
@@ -392,7 +510,7 @@
     \label{subsec:chn4}
     From class: 
 
-    For set of points in polygon $P$, for every triple $i, j, k$, for every point $l$ not equal to $i, j, k$, if $l \in \Delta ijk$, discard $l$, as point inside the $\Delta$ can't be on the $\mathcal{CH}$. This runs $O(n^4)$ time ($n \times n \times n-1 \times n-2$).
+    For set of points in polygon $P$, for every triple $i, j, k$, for every point $l$ not equal to $i, j, k$, if $l \in \Delta ijk$, discard $l$, as point inside the $\Delta$ can't be on the $\mathcal{CH}$. This runs $O(n^4)$ time ($n \times n \times n-1 \times n-2$). $O(n)$ space.
     %%%%%%%%%
 
     %%%
@@ -425,6 +543,8 @@
         &= (x_a y_b - x_a y_c) + ( x_c y_a - x_b y_a) + (x_b y_c - x_c y_b) \\
     \end{align*}
     A set of points is a $\mathcal{CH}$ if all the points turn in the same direction. If one different direction is detected, then the polygon is either complex or concave. 
+    
+    It must also be that, when you transform all vectors $\overrightarrow{v_i v_{i+1}}$ to the origin in that order, no vector crosses over any other, and it must only go around the origin once. Otherwise, it is not convex.
     %%%%%%%%%
 
     %%%
@@ -457,17 +577,42 @@
                     \item Check each of the $n^2 - n$ \emph{pairs} of points. For each pair, look at $n - 2$ other points to see if they lie to one side. Total: $O(n^3)$.
                     \item Constructing $\mathcal{L}$ is $O(n^2)$.
                     \item Total overall: $O(n^3)$.
+                    \item Space: $O(n)$
                 \end{itemize}
         \end{itemize}
         %%%%%%%%%
 
-        %%%
+
+    %%%
+    \subsection{\textbf{Algorithm} Jarvis March (Gift Wrapping) - $O(n^2)$}
+    \label{subsec:giftwrapping}
+    \url{https://iq.opengenus.org/gift-wrap-jarvis-march-algorithm-convex-hull/}
+
+        \begin{itemize}
+            \item Sweepline/Incremental algorithm 
+            \item Starting with an extreme point (leftmost/rightmost/etc.), and keep wrapping the points in ccw direction. 
+            \item Finding the \emph{next} point involves calculating if the the next candidate makes a ccw orientation with the previous two points. Decide on the directionality, but essentially: 
+
+            \begin{itemize}
+                \item Caclulate all the slopes from current point with all the other points. 
+                \item Pick the point that gave use the minimum slope. 
+                \item The min slope point is now the current point. Repeat this process until we return to the first point. 
+                \item \emph{You may need to pick a directionality when you get to the other extreme and start to ``turn around''.}
+            \end{itemize}
+
+            \item This algorithm is output sensitive. So runtime is $O(nh)$, and worst is when $h = n$.
+        \end{itemize}
+
+    %%%%%%%%%
+
+
+    %%%
     \subsection{\textbf{Algorithm} ConvexHull($P$) - Incremental Algorithm $O(n \log n)$}
     \label{subsec:chinc}
 
-        Needs only a sorting method and a method to test if three points can make a right turn. 
+        Needs only a sorting method and a method to test if three points can make a right turn. \cite{berg08}
 
-        Briefly: Given the set $P$ of points on a plane, sort the points $p_1, ..., p_n$ ordering them by their x-coordinate. Compute the convex hull vertices on the \emph{upper hull} first, from left to right, from point $p_1$ to $p_n$. Then copute the convex hull vertices of the \emph{lower hull} from right to left, from $p_n$ to $p_1$. 
+        Briefly: Given the set $P$ of points on a plane, sort the points $p_1, ..., p_n$ ordering them by their x-coordinate. Compute the convex hull vertices on the \emph{upper hull} first, from left to right, from point $p_1$ to $p_n$. Then compute the convex hull vertices of the \emph{lower hull} from right to left, from $p_n$ to $p_1$. 
 
         Updating of the upper hull after adding point $p_i$ is important. Suppose there is a list $\mathcal{L}_{up}$ containing the left to right upper hull vertices seen thus far, $\{p_1, ..., p_{i - 1}\}$. Append $p_i$ to $\mathcal{L}_{up}$. It is correct if $p_i$ is the rightmost point so far, and if the last three points in $\mathcal{L}_{up}$ make a \emph{right} turn. Move on to $p_{i+1}$ if $p_i$ can be in the upper hull thus far. If a left turn is made, delete the middle point from the upper hull, and keep rechecking the last three points until a right turn is verified.
 
@@ -487,7 +632,7 @@
                     \label{fig:chalgo2}
                 \end{subfigure}
             \end{tabular}
-            \caption{Convex Hull Algorithm}
+            \caption{Convex Hull Algorithm. In (b), the order of those points being deleted is right to left, as $p_i$ is the rightmost point thus far being checked for inclusion in the convex hull.}
         \end{figure}
 
 
@@ -525,6 +670,7 @@
                 \begin{itemize}
                     \item Correctness of computation of upper hull (and lower) is proof by induction. Briefly, the set $\mathcal{L}_{up}$ of $\{p_1, p_2\}$ is trivially the upper hull. $\mathcal{L}_{up}$ containing the chain $\{p_1, ..., p_{i - 1}\}$ is known, by induction to only make right turns, and that all points fall below the chain. When considering point $p_i$, be know that $p_1$ is the smallest point and $p_i$ will be the biggest point thus far. There can be no points above the old chain, because if there were, then it would have to lie between $p_{i-1}$ and $p_i$ in sorted order. 
                     \item Sorting the points can be done in $O(n \log n)$ time. Computing upper hull is done in $O(n)$ time, because the for loop is executed a linear number of times, as any extra executions (from the while loop) is bound by $n$ since extra points can only be deleted onces during the hull construction. Similarly, lower hull construction is $O(n)$ time. Therefore total time for computing convex hull is $O(n \log n)$. 
+                    \item Space is $O(n)$.
                 \end{itemize}
         \end{itemize}
 
@@ -536,29 +682,7 @@
             \label{fig:chalgo3}
         \end{figure}
         %%%%%%%%%
-        
-
-    %%%
-    \subsection{\textbf{Algorithm} Jarvis March (Gift Wrapping) - $O(n^2)$}
-    \label{subsec:giftwrapping}
-    \url{https://iq.opengenus.org/gift-wrap-jarvis-march-algorithm-convex-hull/}
-
-        \begin{itemize}
-            \item Sweepline/Incremental algorithm 
-            \item Starting with an extreme point (leftmost/rightmost/etc.), and keep wrapping the points in ccw direction. 
-            \item Finding the \emph{next} point involves calculating if the the next candidate makes a ccw orientation with the previous two points. Decide on the directionality, but essentially: 
-
-            \begin{itemize}
-                \item Caclulate all the slopes from current point with all the other points. 
-                \item Pick the point that gave use the minimum slope. 
-                \item The min slope point is now the current point. Repeat this process until we return to the first point. 
-                \item \emph{You may need to pick a directionality when you get to the other extreme and start to ``turn around''.}
-            \end{itemize}
-
-            \item This algorithm is output sensitive. So runtime is $O(nh)$, and worst is when $h = n$.
-        \end{itemize}
-
-    %%%%%%%%%
+            
 
     %%%
     \subsection{\textbf{Algorithm} Graham Scan - $O(n \log n)$}
@@ -566,8 +690,8 @@
         \url{https://iq.opengenus.org/graham-scan-convex-hull/}
 
         \begin{itemize}
+            \item See Section \ref{subsec:chinc} for the $O(n \log n)$ time due to the pre-sorting. Forming a hull after sorting is $O(n)$ time. $O(n)$ space.
             \item Uses a stack to remove concavities. Incremental.
-            \item Efficient and can run $O(n \log n)$
             \item The runtime rather comes from finding a central position (or even any), calculating all their polar angles (or slopes), and \emph{sorting} them by the angles first. This algorithm comes with a \textbf{Pre-processing} step.
             \item Add the smallest y-coord point to the stack (finding it takes $O(n)$ time), add the next two points in the order to the stack (pre-processing took $O(n\log n)$). Calculate their orientation. The the next point is a candidate; calculate the orientation of the candidate and top two points in the stack. If you get the same orientation, add cancdidate to stack move on to next point; else, pop the stack, and check again. Repeat the popping until you get the orientation desired. Every element is pushed and popped from the stack at most once, and assuming each stack operation takes $O(1)$, so forming the hull is $O(n)$. 
         \end{itemize}
@@ -580,44 +704,43 @@
         \begin{itemize}
             \item A \emph{bridge} is the support line that forms the edge of $\mathcal{CH}$ or one that forms a new $\mathcal{CH}$ edge between two convex polygons when we want to form a new convex hull from their merge. 
             \item Bridge finding is the goal of a divide and conquer method for finding convex hulls.
-            \item Bridge finding takes logarithmic time. And there are 8 cases to examine. 
+            \item Bridge finding takes logarithmic time. And there are 8 cases to examine. See Notes and Section \ref{subsec:dynamichull}.
         \end{itemize}
 
     %%%%%%%%%
 
     %%%
-    \subsection{Divide \& Conquer Convex Hull Methods}
+    \subsection{General Divide \& Conquer Convex Hull Methods}
     \label{subsec:dchull}
         
         \begin{itemize}
             \item Typically $T(n) = 2\ T(\frac{n}{2}) + \Theta(n)$. Outline for an unsorted set of points $S$:
                 \begin{itemize}
                     \item \emph{assume pre-sort; or sort ($O(n \log n)$)}
-                    \item Find $\mathcal{CH}(S, 1, \frac{n}{2})$
-                    \item Find $\mathcal{CH}(S, \frac{n}{2} + 1, n)$
+                    \item Find $\mathcal{CH}(S, 1, \frac{n}{2})$ (``left'')
+                    \item Find $\mathcal{CH}(S, \frac{n}{2} + 1, n)$ (``right'')
                     \item Merge the $\mathcal{CH}$'s
                 \end{itemize}
             \item Something like binary search ($O(\log n)$) can be used to find the bridge, for $T(n) = 2\ T(\frac{n}{2}) + \Theta(\log n)$.
             \item Some useful data structures, such as \textbf{concatenable queue}, can make inserting a point, deleting a point, or finding a point, splitting, joining (implant) take time $O(\log n)$.
-            \item 
         \end{itemize}
 
     %%%%%%%%%
 
     %%%
     \subsection{\textbf{Algorithm} Quick Hull - $O(n^2)$}
-    \label{subsec:3dconvexhull}
+    \label{subsec:quickhull}
         \url{https://iq.opengenus.org/quick-hull-convex-hull/}
 
         \url{https://www.geeksforgeeks.org/quickhull-algorithm-convex-hull/}
 
         \begin{itemize}
             \item Like quicksort. Divide and Conquer method.
-            \item Find the leftmost and rightmost points. 
-            \item Find the highest and lowest points relative to the left-right's slope. 
-            \item Form a triangle with the left, right, and lowest points. Discard all points inside triangle. 
-            \item Repeat this process with one of the left or right, and the extreme point you picked (i.e. one of the edge of the triangle).
-            \item Best case is $O(n\log n)$. Worse case is $O(n^2)$.
+            \item Find the leftmost and rightmost points, $\ell$ and $r$. 
+            \item Find the highest and lowest points relative to the $\overline{\ell r}$ slope. We call this extreme point $e$ 
+            \item Form a triangle with $\ell$, $r$, and $e$. Discard all points inside triangle $\Delta \ell r e$. 
+            \item Repeat this process with one of $\ell$ or $r$, and the $e$ you picked (i.e. one of the new edge of the triangle).
+            \item Best case is $O(n\log n)$. Worse case is $O(n^2)$ if all points are in the convex hull.
         \end{itemize}
 
     
@@ -627,10 +750,14 @@
 
     \url{https://iq.opengenus.org/kirkpatrick-seidel-algorithm-convex-hull/}
 
+    \cite{kirk1986}
+
         \begin{itemize}
             \item Prune \& Search. Output sensitive.
-            \item Instead of recurisng on each half after splitting the set like in a D\&C, this computes how the sets should be merged, then recurse on subsets. This finds upper hull, and then when you fid the lower hull, the two sets can be concatenated.
+            \item Runs in $O(n\log h)$ time, where $h = |\mathcal{CH}(S)|$. Even in worst case, where every point is in the hull, time is still $O(n \log n)$ like Graham's Scan.
+            \item Instead of recurisng on each half after splitting the set like in a D\&C, this computes how the sets should be merged, then recurse on subsets. This finds upper hull, and then when you find the lower hull, the two sets can be concatenated.
             \item Briefly: \emph{Given a set, find the median vertical. Next goal is to find the bridge that crosses the median vertical. By definition of $\mathcal{CH}$, all points beneath this line is not in the $\mathcal{CH}$, so you discard/prune these points. The remaining points are split into the $L$ and $R$ subsets, and you recurse on them}. 
+            \item This is also useful when you have two disjointed convex hulls and want to merge them; simply find the bridge that crosses the median between the two hulls, as opposed to trying all the vertex combinations.
             \item The Kirkpatrick-Seidel algorithm:
             \begin{enumerate}
                 \item \emph{don't sort!}
@@ -667,7 +794,7 @@
 
              
 
-                \item Repeat from step 2 for remainder subsets $L$ and $R$ pm either side of the bridge.
+                \item Repeat from step 2 for remainder subsets $L$ and $R$ on either side of the bridge.
             \end{enumerate}
         \end{itemize}
 
@@ -707,8 +834,9 @@
         See user guide section on this.
 
         \begin{itemize}
-            \item Order Decomposable Problem, Point Inclusion, Detecting Intersection 
-            \item This algorithm addresses when a new point is added to the current set we already computed the convex hull for, or delete a point from the set. This avoids recalculating the entire set for changes regarding single points.
+            % \item Order Decomposable Problem, Point Inclusion, Detecting Intersection 
+            \item Convex Hull construction is Order-Decomposable: we define some ordering function and merging function, where the merging operates iteratively on the ordered input set. 
+            \item This algorithm addresses when we want to to ADD a new point to or DELETE a point from the current set that we already computed the convex hull for. This avoids recalculating the entire set for changes regarding single points. Recalculating a $\mathcal{CH}$ is of cource $O(n \log n)$ time, but we want a single update to take only $O(\log^2 n)$ time, and make our algorithms dynamic for these updates.
             \item Using a concatenable queue makes bridge finding between two hulls is $O(\log n)$; then we can concatenate the left portion of the left hull with the right portion of the right hull. This relies on sorting the points though, so sorting dominates the runtime at $O(n \log n)$, while the merge gives a recurrance of $T(n) = 2 T(\frac{n}{2}) + O(\log n) = O(n)$.
             \item Best to use a dynamic (augmented) tree as the data structure. The root contains the points of the $\mathcal{CH}$, while the subtrees/node has info about the partial hulls, and can point to another tree. We can retain the info of points that aren's in the $\mathcal{CH}$. The leaves are the actual data/points. 
             \item There are 8 cases to examine to find the bridge between hulls $A$ and $B$. See Class Nodes for Dynamic Convex Hull. But succinctly, when examining if line $\overline{ab}$ could be the bridge, we consider the angles given by $a$ and its neighbors and by $b$ and its neighbors ($\angle a_l\ a\ a_r$ and $\angle b_l\ b\ b_r$), the angles are relative to the line $\overline{ab}$: 
@@ -725,9 +853,35 @@
                 \item Only $\overline{b\ b_l}$ falls below $\overline{ab}$ $\longrightarrow$ discard the right subchain in $A$ and $B$.
                 \item Only $\overline{a\ a_r}$ falls below $\overline{ab}$ $\longrightarrow$ discard the left subchain in $A$ and $B$.
             \end{enumerate}
+
+            \item This bridge finding process can run in $O(\log n)$ time. And since out DS is an augmented tree, the total runtime to apply the update is $O(\log^2 n)$.
+        \end{itemize}
+
+
+        Some Order-Decomposable Problems: 
+        \begin{itemize}
+            \item Finding intersection of Half Plane 
+            \item Finding the set of Dominant Points (Maxima) 
+            \item Finding top and bottom of a polygon with tertiary search in sub-linear time
         \end{itemize}
 
     %%%%%%%%%
+
+    %%%
+    \section{Point Inclusion}
+    \label{sec:ptincl}
+
+    \begin{itemize}
+        \item It is $O(\log n)$ time to test point inclusion with a convex polygon.
+        \item This problem can get more complex as the polygon gets more complex. For example, point inclusion with an x-monotone polygon, arbitrary polygon.
+        \item For more complex polygons, you can regularize them into planar subdivisions, and test point inclusion on the convex polygons they breaks down into.
+        \item There is a Slab Method for Planar Point Location (Dobkin and Lipton)
+        \item Future sections address these more complex spaces.
+    \end{itemize}
+
+
+
+    %%%%%%%%%%%
 
 
     %%%
@@ -765,7 +919,7 @@
         \end{itemize}
 
     %%% 
-    \subsection{\textbf{Algorithm} Intersections: Plane Sweep}
+    \subsection{\textbf{Algorithm} Intersections: Line Segment Intersections / Plane Sweep - $O(n^2 \log n)$}
         \begin{itemize}
             \item Let two lines $\overline{a_0 a_1}$ and $\overline{b_0 b_1}$ intersect at a point $p$. 
             
@@ -798,8 +952,55 @@
     %%%%%%%%%%%%%%%%%%%%%%%
 
     %%%%%%%%%%%%%%%%%%%%%%%
-    \subsection{Doubly Connected Edge List}
+    \subsection{Hierarichal Search (Triangles)}
         \begin{itemize}
+            \item $O(n)$ space 
+            \item Preprocessing is $O(n\log n)$ 
+            \item Query time is $O(\log n)$
+            \item Reference point is in a $\Delta$, so the $\Delta$ can be divided into three triangles. Continue dividing it until we reach bottom. 
+            \item Example 
+                \begin{itemize}
+                    \item $v = n = 5$ 
+                    \item $f \leq 2n - 4 = 6$ 
+                    \item $e \leq 3n - 6 = 9$ 
+                    \item average degree $< 6$ 
+                    \item Total degree $\leq 6n - 12$. 
+                \end{itemize}
+            \item Space: $S(n) = n + S(\frac{23n}{24}) = \Theta(n)$
+        \end{itemize}
+    %%%%%%%%%%%%%%%%%%%%%%%
+
+    %%%%%%%%%%%%%%%%%%%%%%%
+    \subsection{\textbf{Algorithm} Line Sweep - $O((n + k) \log n)$}
+        \begin{itemize}
+            \item A naive algorithm is to visit every intersection point in the place. $O(n^2)$ time for $O(n^2)$ intersections for $n$ lines. 
+            \item If we use a line sweep, the choice in status and stopping point data structure can affect run time. 
+            \item Status array and Stopping priority queue gives us $O(n^2 \log n)$ time and $O(n)$ space.
+            \item BBST status and stopping DS can give us 
+            \item Status array and Stopping priority queue gives us $O((n + k) \log n)$ time and $O(n)$ space, for $n$ line segments with $k$ intersections. The key is to have the status only contain the current stabbed lines in order based on who they are adjacent to, and the stopping point DS should only contain the intersections of current neighors. This involves a lot of updates, but updates in a BBST is only $O(\log n)$ time. Sweep line is output sensitive.
+        \end{itemize}
+    %%%%%%%%%%%%%%%%%%%%%%%
+
+    %%%%%%%%%%%%%%%%%%%%%%%
+    \subsection{Regularizing Planar Subdivisions and Triangulating}
+        \begin{itemize}
+            \item Turning an arbitrary polygon into monotone regions takes $O(n\log n)$ time. 
+            \item Turning a monotone polygon into triangles takes $O(n)$ time using a DCEL.
+
+                \begin{itemize}
+                    \item Preprocessing: $O(n)$ time 
+                    \item Triangulating: $O(n)$ time
+                \end{itemize}
+
+            \item Testing a point for inclusion in a triangle is $O(1)$.
+        \end{itemize}
+    \pagebreak
+    %%%%%%%%%%%%%%%%%%%%%%%
+
+    %%%%%%%%%%%%%%%%%%%%%%%
+    \subsection{Doubly Connected Edge List (DCEL)}
+        \begin{itemize}
+            \item 
             \item DCEL contains a record for each face, edge, and vertex of a planar subdivision. (In application, it is useful for these records to also contain attribute information, such as what is in a given face.)
         \end{itemize}
     \pagebreak
@@ -835,6 +1036,58 @@
         \end{itemize}
     \pagebreak
     %%%%%%%%%%%%%%%%%%%%%%%
+
+    %%%%%%%%%%%%%%%%%%%%%%%
+    \section{Least Median Square Regression}
+    \label{sec:lms}
+
+        \begin{itemize}
+            \item To find a subset of a set that contains $\ceil*{\frac{n}{2}}$ of the data points:
+            
+            \begin{itemize}
+                \item Naive: For every triple $i, j, k\in S$, make parallel lines through $k$ and $\overline{ij}$, and check if $\ceil*{\frac{n}{2}}$ are in that slab. $O(n^4)$ time. 
+                \item 
+            \end{itemize}
+
+
+
+
+            \item 
+        \end{itemize}
+
+
+        \subsection{Duality}
+        \label{subsec:dual}
+            
+        \begin{itemize}
+            \item These mappings hold from primal to dual and back:
+            
+            \begin{itemize}
+                \item $(a, b) \mapsto y = ax + b$
+                \item $y = cx + d \mapsto (-c, d)$
+            \end{itemize}
+
+            \item Vertical Distance is preserved. 
+            
+            \item For a set of $n$ points in $S$, we can transform each point $p \in S$, where $p = (a, b)$, into the dual, so $T(p) = ax + b$. In the dual, we now have an arrangement of lines, which we can \emph{sweep} over. Sinve vertical distance is preserved, we simply pick the ``height'' $h$ we want, and at each stopping point in the sweep, we select the $h$ adjacent neighbors (cuts) and record that distance. Typically, the goals is to find the ``tightest'' fit, or shortest distance that will contain $\ceil*{\frac{n}{2}}$ of the data points. That gives us out LMSR.
+            
+            \item In the dual: 
+            
+            \begin{itemize}
+                \item Points on the same segment in the primal will intersect in the dual at the pencil point ($y = cx + d \mapsto (-c, d)$).
+                \item The two regions created in the dual is known as dowble wedge.
+                \item If two primal segments intersect, then each of their pencils are in a wedge of the other ni the dual 
+                \item if two primal segments don't intersect unless both their lines extend, then neither pencils is in the wedge of the other in the dual, but their wedges may overlap.
+                \item if two primal segments don't intersect unless one of the segments extends, then the pencil of the non-extended one lives in the wedge of the other in the dual.
+            \end{itemize}
+
+        \end{itemize}
+
+
+
+
+        \pagebreak
+    %%%%%%%%%%%%%%%%%%%%%%%
     
     % END %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
    
@@ -843,7 +1096,8 @@
     %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
     \begin{thebibliography}{1}
         \bibitem[1]{berg08}Mark de Berg, Otfried Cheong, Marc van Kreveld, and Mark Overmars. 2008. Computational Geometry: Algorithms and Applications (3rd ed. ed.). Springer-Verlag TELOS, Santa Clara, CA, USA.
-        \bibitem[2]{key2}Hi
+        \bibitem[2]{kirk1986}David G Kirkpatrick and Raimund Seidel. 1986. \href{http://graphics.stanford.edu/courses/cs268-16-fall/Notes/KirkSeidel.pdf}{The ultimate planar convex hull algorithm}. SIAM J. Comput. 15, 1 (Feb. 1986), 287-299. https://doi.org/10.1137/0215021
+        \bibitem[3]{kirk1983}David G Kirkpatrick. 1983. \href{https://www.ics.uci.edu/~goodrich/teach/geom/notes/Kirkpatrick-paper.pdf}{Optimal Search in Planar Subdivisions}. SIAM J. Comput. 12, 1 (Feb. 1983), 28-35.
     \end{thebibliography}
     % END %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
