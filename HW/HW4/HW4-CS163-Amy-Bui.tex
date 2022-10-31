@@ -1,0 +1,175 @@
+% -*- LaTeX -*- %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%
+% Template for scribing COMP163 - Computational Geometry 
+%
+% Spring, 2004
+%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%**start of header 
+
+\documentclass [12pt]{article}
+\usepackage{epsfig}
+\usepackage{enumitem}
+\usepackage{amsmath}
+\usepackage[color, leftbars]{changebar}
+
+\usepackage{caption}
+\usepackage{subcaption}
+
+
+\setlength{\textwidth}{6.5in}
+\setlength{\textheight}{9in}
+\setlength{\oddsidemargin}{0in}
+\setlength{\evensidemargin}{0in}
+\setlength{\topmargin}{-0.5in}
+
+\setlength{\parindent}{0pt}
+
+\newtheorem{theorem}{Theorem}[section]
+\newtheorem{definition}[theorem]{Definition}
+\newtheorem{claim}[theorem]{Claim}
+\newtheorem{lemma}[theorem]{Lemma}
+\newtheorem{proof}[theorem]{Proof}
+
+\newlength{\toppush}
+\setlength{\toppush}{2\headheight}
+\addtolength{\toppush}{\headsep}
+
+\usepackage{hyperref}
+\hypersetup{
+    colorlinks=true,
+    linkcolor=blue, % was previously black
+    filecolor=magenta,
+    urlcolor=blue,
+    pdftitle={Template}
+}
+\urlstyle{same}
+
+%\doheading{2}{title}{Last Revised: January, 2004}
+%\htitle{title}
+
+\def\subjnum{Comp 163}
+\def\subjname{Computational Geometry}
+
+\def\doheading#1#2#3{\vfill\eject\vspace*{-\toppush}%
+  \vbox{\hbox to\textwidth{{\bf} \subjnum: \subjname \hfil Amy Bui}%
+    \hbox to\textwidth{{\bf} Tufts University, Fall 2022 \hfil#3\strut}%
+    \hrule}}
+
+\newcommand{\htitle}[1]{\vspace*{3.25ex plus 1ex minus .2ex}%
+\begin{center}
+{\large\bf #1}
+\end{center}} 
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{document}
+\doheading{2}{title}{HW 4} 
+% \htitle{Homework 1}
+% \bigskip 
+% \bigskip 
+%%%%%%%%%% begin text after this line %%%%%%%%%%%%%%
+
+    %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+    \section{Delaunay Triangulation, Voronoi Diagram, and Gabriel Graph}
+    \label{sec:one}
+
+        Relate the Delaunay triangulation and Voronoi diagram to edges that appear in the Gabriel Graph. (Hint: The Gabriel Graph is a subgraph of the Delaunay triangulation). Don't all edges of a Delaunay triangle cross a Voronoi edge? Prove it in both directions. \\
+
+        ($\Rightarrow$) For two points $p_i, p_j \in S$, $\overline{p_i p_j}$ is the edge that connects them, and $C_{ij}$ is the circle with $\overline{p_i p_j}$ as the diameter. We say that $C_{ij}$ is an empty circle with no points of $S$ in its interior and therefore $\overline{p_i p_j} \in \mathcal{GG}(S)$; we then consider a third point $p_k\in S$, where $p_k \neq p_i, p_j$ and $p_k$ is not interior to $C_{ij}$. Either 
+
+        \begin{enumerate}
+            \item $p_r$ is on the circumference of $C_{ij}$. Therefore, by definition\footnote{Theorem 9.6.i \cite{berg08} pg. 198}, $\Delta p_i p_j p_j$ is a face in the Delaunay triangulation, and so $\overline{p_i p_j} \in \mathcal{DT}(S)$ (as do the other edges formed by the three points).
+            \item $p_r$ is exterior to $C_{ij}$. Therefore, by definition\footnote{Theorem 9.6.ii \cite{berg08} pg. 198}, $\overline{p_i p_j} \in \mathcal{DT}(S)$.
+        \end{enumerate}
+
+        The $\mathcal{DT}(S)$ is the dual of the $\mathcal{VD}(S)$; by definition, the vertices of $\mathcal{DT}(S)$ are Voronoi sites and the edges of $\mathcal{VD}(S)$ are those that connect those circumcenters in $\mathcal{DT}(S)$ that share a triangle edge (and so, cross that edge). We can conclude that for $\overline{p_i p_j} \in \mathcal{GG}(S)$ if and only if $\overline{p_i p_j} \in \mathcal{DT}(S)$, because $mathcal{GG}(S)\subseteq \mathcal{DT}(S)$. \\
+
+
+        Since $\mathcal{GG}(S)\subseteq \mathcal{DT}(S)$, we can find $\mathcal{GG}(S)$ very easily. First, compute the $\mathcal{DT}(S)$, which can be done in $O(n\log n)$ time and $O(n)$ space\footnote{Theorem 9.12 \cite{berg08} pg. 206}. Then, We can walk the edges of $\mathcal{DT}(S)$ in $O(n)$ time, and check each if the circle with just that edge, $\overline{p_i p_j}$, as the diameter contains an interior point or not. Since this was an edge in the $\mathcal{DT}$, there is only one potential point that could be interior, the third point in the triangle; so we only need to check if the neighbors of $p_i, p_j$ are interior to $C_{ij}$. If it has interior points, then discard that edge; otherwise, it is an edge in $\mathcal{GG}(S)$. The total runtime is $O(n\log n)$ due to computing the $\mathcal{DT}(S)$, which is optimal and faster than checking every pair of points with every other point for being interior, which would come out to be $O(n^3)$ time.
+
+        
+
+
+        \begin{enumerate}[label=\alph*.]
+            \item 
+        \end{enumerate}
+        
+    \pagebreak
+    % END %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+    
+    %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+    \section{Euclidean Norm}
+    \label{sec:two}
+
+    norm formula is 
+
+    L-dist is distance from 2 points 
+    
+
+    \begin{enumerate}[label=\alph*.]
+        \item d
+
+    \end{enumerate}
+
+
+    
+
+        
+    \pagebreak
+    % END %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+
+    %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+    \section{Double Wedges}
+    \label{sec:three}
+
+    \begin{enumerate}[label=\alph*.]
+        \item 
+
+       
+    \end{enumerate}
+
+
+    \pagebreak
+    % END %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+
+    %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+    \section{Project}
+    \label{sec:four}
+
+    I emailed Diane about a project on line sweeping.
+
+    % \begin{enumerate}[label=\alph*.]
+    %     \item 
+       
+    % \end{enumerate}
+    
+        
+    % \pagebreak
+    % END %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+
+
+    %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+    
+
+    % \pagebreak
+    % END %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+
+\begin{thebibliography}{1}
+    \bibitem[1]{officehours}Jake and Diane's office hours, classmates: Stephanie, Alex, Anju with homework problem discussions.
+    \bibitem[2]{berg08}Mark de Berg, Otfried Cheong, Marc van Kreveld, and Mark Overmars. 2008. Computational Geometry: Algorithms and Applications (3rd ed. ed.). Springer-Verlag TELOS, Santa Clara, CA, USA.
+    \bibitem[3]{edelwel}H. Edelsbrunner and L.J Guibas, \href{https://www.sciencedirect.com/science/article/pii/002200008990038X}{``Topological Sweep an Arrangement''}. Journal of Computer and System Sciences. 38:164-194. 1989.
+\end{thebibliography}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\end{document}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+

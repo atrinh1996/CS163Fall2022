@@ -1092,6 +1092,46 @@
     % END %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
    
 
+    \section{Voronoi Diagrams}
+    \label{sec:voronoi}
+
+    \begin{figure}[h]
+        \centering
+        \includegraphics[width=0.3\textwidth]{images/voronoi1.png}
+    \end{figure}
+
+    \begin{itemize}
+        \item The voronoi diagram of a set $P$ of $n$ points is denoted Vor($P$). It may simply refer to the set of the edges and vertices that make up the diagram. The actual points in the set are known aas voronoi sites. 
+        \item Each cell in Vor($P$) is denoted $\mathcal{V}(p_i)$, if the voronoi site is given by point $p_i \in P$.
+        \item The edge between $p_i, p_j \in P$, $i \neq j$, is given by the perpendicular bisector of $\overline{p_i p_j}$. 
+        \item For $n$ sites, each $\mathcal{V}(p_i)$ has at most $n-1$ vertices and edges; but actually, using \emph{Euler's formula}, for $n \geq 3$, the entire Vor($P$) has at most $2n - 5$ vertices, and $3n - 6$ edges. The complexity of  Vor($P$) is linear. 
+    \end{itemize}
+
+    \begin{figure}[h]
+        \begin{tabular}{cc}
+            \begin{subfigure}{0.5\linewidth}
+                \centering
+                \includegraphics[width=0.5\textwidth]{images/voronoi2.png}
+            \end{subfigure} &
+            \begin{subfigure}{0.5\linewidth}
+                \centering
+                \includegraphics[width=0.5\textwidth]{images/voronoi3.png}
+            \end{subfigure}
+        \end{tabular}
+    \end{figure}
+
+    \begin{itemize}
+        \item Vor($P$) can be computed in $\Omega(n\log n)/O(n \log n)$ time using Fortune's algorithm, using a plane sweep algorithm that uses a horozontal line. 
+    \end{itemize}
+
+
+    \pagebreak
+    %%%%%%%%%%%%%%%%%%%%%%%
+    
+    % END %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+   
+
+
     \pagebreak
     %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
     \begin{thebibliography}{1}
