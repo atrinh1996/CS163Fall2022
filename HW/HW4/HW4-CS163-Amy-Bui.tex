@@ -100,40 +100,60 @@
 
     
     %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-    \section{Euclidean Norm}
+    \section{Voronoi Diagrams in $L_1$ and $L_\infty$ Metrics}
     \label{sec:two}
 
-    norm formula is 
+    Reference: \cite{leewong}, \cite{voronoiinteract}
 
-    L-dist is distance from 2 points 
-    
+    In an arbitrary $d$-dimensional plane $R^d$, for a real number $1 \leq p \leq \infty$, the $L_p$-distance between two points $q_i(x_{i1}, x_{i2}, ... x_{id})$ and $q_j(x_{j1}, x_{j2}, ... x_{jd})$ is given by the norm: $$ d_{p}(q_i, q_j) = \Big[ \sum_{k = 1}^{d} \Big( |x_k(q_i) - x_k(q_j)| \Big) \Big]^{\frac{1}{p}} $$
+
+    The plane in which the $L-p$ distance is measured is denoted $R^d_p$. \\
+
+
+    In a 2D plane $R^{2}$, given two points $q_i(x_i, y_i)$ and $q_j(x_j, y_j)$, the distance between them in the $L_1$ metric ($R^2_1$ plane) is given by: $$ d_{1}(q_i, q_j) = |x_i - x_j| + |y_i - y_j| $$
+
+    The distance between them in the $L_\infty$ metric ($R^2_\infty$ plane) is given by: $$ d_{\infty}(q_i, q_j) = \text{max}\Big( |x_i - x_j|, |y_i - y_j| \Big)  $$
+
+
+    There exists a linear mapping $f$ from the $R^2_\infty$ plane to the $R^2_1$ plane. For a point $(x, y) \in R^2_\infty$, there exists a point $(x', y') \in R^2_1$ where $x' = \frac{y + x}{2}$ and $y' = \frac{y - x}{2}$. The distance between two points $q_i, q_j \in R^2_\infty$ is equal to the distance between their images $q_i', q_j' \in R^2_1$. \\
+
+    For example, let $q_i(x_i, y_i), q_j(x_j, y_j) \in R^2_\infty$ and let $x_j > x_i$, $y_i > y_j$, and $y_j - y_i > x_j - x_i$. So the between them is $d_{\infty}(q_i, q_j) =  y_j - y_i $.\\ 
+
+    The distance between $q_i'(x_i', y_i'), q_j'(x_j', y_j') \in R^2_1$ is equal to $d_{\infty}(q_i, q_j)$: 
+
+    \begin{align*}
+        d_{1}(q_i', q_j')   &= |x_j' - x_i'| + |y_j' - y_i'| \\ 
+                            &= \Big( \frac{y_j + x_j}{2} - \frac{y_i + x_i}{2} \Big) + \Big( \frac{y_j - x_j}{2} - \frac{y_i - x_i}{2} \Big) \\ 
+                            &= \frac{1}{2} \Big( (y_j - y_i) + (x_j - x_i) \Big) + \frac{1}{2} \Big( (y_j - y_i) - (x_j - x_i) \Big)\\ 
+                            &= \frac{1}{2} \Big( 2(y_i - y_j) + (x_j - x_i) - (x_j - x_i) \Big) \\
+                            &= y_i - y_j \\ 
+                            &= d_{\infty}(q_i, q_j)
+    \end{align*}
+
+
+
 
     \begin{enumerate}[label=\alph*.]
-        \item d
+        \item 
 
     \end{enumerate}
 
-
-    
-
         
-    \pagebreak
+    % \pagebreak
     % END %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 
 
     %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-    \section{Double Wedges}
+    \section{Three}
     \label{sec:three}
 
     \begin{enumerate}[label=\alph*.]
         \item 
-
-       
     \end{enumerate}
 
 
-    \pagebreak
+    % \pagebreak
     % END %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 
@@ -141,13 +161,6 @@
     %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
     \section{Project}
     \label{sec:four}
-
-    I emailed Diane about a project on line sweeping.
-
-    % \begin{enumerate}[label=\alph*.]
-    %     \item 
-       
-    % \end{enumerate}
     
         
     % \pagebreak
@@ -167,7 +180,8 @@
 \begin{thebibliography}{1}
     \bibitem[1]{officehours}Jake and Diane's office hours, classmates: Stephanie, Alex, Anju with homework problem discussions.
     \bibitem[2]{berg08}Mark de Berg, Otfried Cheong, Marc van Kreveld, and Mark Overmars. 2008. Computational Geometry: Algorithms and Applications (3rd ed. ed.). Springer-Verlag TELOS, Santa Clara, CA, USA.
-    \bibitem[3]{edelwel}H. Edelsbrunner and L.J Guibas, \href{https://www.sciencedirect.com/science/article/pii/002200008990038X}{``Topological Sweep an Arrangement''}. Journal of Computer and System Sciences. 38:164-194. 1989.
+    \bibitem[3]{leewong}D.T Lee and C.K. Wong, \href{https://epubs.siam.org/doi/epdf/10.1137/0209017}{``Voronoi Diagrams in $L_1$ and ($L_{\infty}$) Metrics with 2-Dimentional Storage Applications''}. SIAM J Comput. Vol. 9, No. 1, 200-212. 1980.
+    \bibitem[4]{voronoiinteract}Yunzhi Shi, \href{http://yunzhishi.github.io/voronoi.html}{``Sarah's Interactive Voronoi Diagram''}. 2017.
 \end{thebibliography}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \end{document}
