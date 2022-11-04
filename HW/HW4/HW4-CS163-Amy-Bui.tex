@@ -11,6 +11,7 @@
 \usepackage{epsfig}
 \usepackage{enumitem}
 \usepackage{amsmath}
+\usepackage{amssymb}
 \usepackage[color, leftbars]{changebar}
 
 \usepackage{caption}
@@ -101,16 +102,26 @@
 
         Show that $p_i$ and $p_j$ have an edge in $\mathcal{GG}(S)$  if and only if $\overline{p_i p_j}$ appears in the $\mathcal{DT}(S)$ and $\overline{p_i p_j}$ crosses its dual Voronoi edge.\\
 
-        ($\Rightarrow$) For two points $p_i, p_j \in S$, $\overline{p_i p_j}$ is the edge that connects them, and $C_{ij}$ is the circle with $\overline{p_i p_j}$ as the diameter. We say that $C_{ij}$ is an empty circle with no points of $S$ in its interior and therefore $\overline{p_i p_j} \in \mathcal{GG}(S)$; we then consider a third point $p_k\in S$, where $p_k \neq p_i, p_j$ and $p_k$ is not interior to $C_{ij}$. Point $p_k$ is either: 
+        ($\Rightarrow$) For two points $p_i, p_j \in S$, $\overline{p_i p_j}$ is the edge that connects them, and $C_{ij}$ is the circle with $\overline{p_i p_j}$ as the diameter. So we say that $C_{ij}$ is an empty circle with no points of $S$ in its interior and therefore $\overline{p_i p_j} \in \mathcal{GG}(S)$; we then consider a third point $p_k\in S$, where $p_k \neq p_i, p_j$ and $p_k$ is not interior to $C_{ij}$. Point $p_k$ is either: 
 
         \begin{enumerate}
-            \item $p_k$ is on the circumference of $C_{ij}$. Therefore, by definition\footnote{Theorem 9.6.i \cite{berg08} pg. 198}, $\Delta p_i p_j p_k$ is a face in the Delaunay triangulation, and so $\overline{p_i p_j} \in \mathcal{DT}(S)$ (as do the other edges formed by the three points). $\Delta p_i p_j p_k$ is a right triangle because they are three points on a circle whose diameter is the hypotenuse. The Voronoi vertex that is the end point of the dividing Voronoi edge between $p_i$ and $p_j$ must be located within the right triangle, equidistance from the three points, and the edge must intersect the circumcenter given by the midpoint of $\overline{p_i p_j}$, because there are no other points intertior or on the circle for which more Voronoi edges would form.
-            \item $p_k$ is exterior to $C_{ij}$. Therefore, by definition\footnote{Theorem 9.6.ii \cite{berg08} pg. 198}, $\overline{p_i p_j} \in \mathcal{DT}(S)$ and the $\overline{p_i p_j}$ could only cross the dividing Voronoi edge that separates the regions of site $p_i$ and $p_j$.
+            \item $p_k$ is on the circumference of $C_{ij}$. Therefore, by definition\footnote{Theorem 9.6.i \cite{berg08} pg. 198}, $\Delta p_i p_j p_k$ is a face in the $\mathcal{DT}(S)$, and so $\overline{p_i p_j} \in \mathcal{DT}(S)$ (as do the other edges formed by the three points). $\Delta p_i p_j p_k$ is a right triangle because they are three points on a circumference of a circle whose diameter is the hypotenuse $\overline{p_i p_j}$. The Voronoi vertex that is the end point of the dividing Voronoi edge between $p_i$ and $p_j$ must be located within the right triangle, equidistance from the three sites, and the edge must intersect the circumcenter given by the midpoint of $\overline{p_i p_j}$ at the vertex, because there are no other points intertior or on the circle for which more Voronoi edges would form (Fig. \ref{fig.1b}).
+            
+            \item $p_k$ is exterior to $C_{ij}$. Therefore, by definition\footnote{Theorem 9.6.ii \cite{berg08} pg. 198}, $\overline{p_i p_j} \in \mathcal{DT}(S)$ and the $\overline{p_i p_j}$ could only cross the dividing Voronoi edge that separates the regions of site $p_i$ and $p_j$, as no other edges of other faces would cross in the region of the circle.
         \end{enumerate}
 
-        ($\Leftarrow$) Given $\overline{p_i p_j}$ appears in the $\mathcal{DT}(S)$ and $\overline{p_i p_j}$ crosses its dual Voronoi edge, I show by contradiction that $\overline{p_i p_j}$ is also in the $\mathcal{GG}(S)$\footnote{Jake}. \\
+        ($\Leftarrow$) Given $\overline{p_i p_j}$ appears in the $\mathcal{DT}(S)$ and $\overline{p_i p_j}$ crosses its dual Voronoi edge, I show by contradiction that $\overline{p_i p_j}$ is also in the $\mathcal{GG}(S)$\footnote{Jake suggested proof by contradiction for the proof in the other direction, and how it might work.}. \\ 
 
-        Suppose that $\overline{p_i p_j}$ doesn't cross its dual Voronoi edge. This means that the dividing edge was ``pushed'' either above or below $\overline{p_i p_j}$, and $\overline{p_i p_j}$ now intersects two other edges of a third Voronoi cell, given by $p_k$. So there is a Voronoi vertex equidistance from the three points and this vertex and the edge it's on doesn't intersect the midpoint of $\overline{p_i p_j}$. This position means the distance between $p_i$ and $p_k$, and the distance between $p_j$ and $p_k$ are both shorter than the distance between $p_i$ and $p_j$. Therefore, taking the circle with the diameter $\overline{p_i p_j}$, $p_k$ must lie interior to the circle. Therefore, $\overline{p_i p_j}$ cannot be in  $\mathcal{GG}(S)$. (Note that this edge can still be in $\mathcal{DT}(S)$ if the circle given by $\Delta p_i p_j p_k$ have no interior points; this just simply means that $\overline{p_i p_j}$ doesn't pass through its circumcircle).\\
+        
+
+        Suppose that $\overline{p_i p_j}$ doesn't cross its dual Voronoi edge. This means that something like Fig. \ref{fig.1b}, the dividing edge was ``pushed'' either above or below $\overline{p_i p_j}$, and $\overline{p_i p_j}$ now intersects two other edges of a third Voronoi cell, given by site $p_k$. So there is a Voronoi vertex equidistance from the three points and this vertex and the edge it's on doesn't intersect the midpoint of $\overline{p_i p_j}$. This position means the distance between $p_i$ and $p_k$, and the distance between $p_j$ and $p_k$ are both shorter than the distance between $p_i$ and $p_j$. Therefore, taking the circle with the diameter $\overline{p_i p_j}$, $p_k$ must lie interior to the circle (Fig. \ref{fig.1b}). Therefore, $\overline{p_i p_j}$ cannot be in  $\mathcal{GG}(S)$ (and its not in $\mathcal{DT}(S)$). \\
+
+        Suppose it $\overline{p_i p_j}$ does cross the dual Voronoi edge and is in $\mathcal{DT}(S)$, but it is not the diameter of its circle (Fig. \ref{fig.1a}). Since it is not the diameter and doesn't pass through the circumcenter, it cannot be in the $\mathcal{GG}(S)$. $\square$
+        
+        
+        % (\textbf{Note}: this edge can still be in $\mathcal{DT}(S)$ if the circle given by $\Delta p_i p_j p_k$ has no interior points; this just simply means that $\overline{p_i p_j}$ doesn't pass through its circumcircle, i.e. it is not the circle's diameter, Fig. \ref{fig.1a}).  \\ 
+
+        \pagebreak
 
         % The $\mathcal{DT}(S)$ is the dual of the $\mathcal{VD}(S)$; by definition, the vertices of $\mathcal{DT}(S)$ are Voronoi sites and the edges of $\mathcal{VD}(S)$ are those that connect those circumcenters in $\mathcal{DT}(S)$ that share a triangle edge (and so, cross that edge). We can conclude that for $\overline{p_i p_j} \in \mathcal{GG}(S)$ if and only if $\overline{p_i p_j} \in \mathcal{DT}(S)$, because $\mathcal{GG}(S)\subseteq \mathcal{DT}(S)$. \\
 
@@ -118,6 +129,38 @@
 
 
         Since $\mathcal{GG}(S)\subseteq \mathcal{DT}(S)$, we can find $\mathcal{GG}(S)$ very easily. First, compute the $\mathcal{DT}(S)$, which can be done in $O(n\log n)$ time and $O(n)$ space\footnote{Theorem 9.12 \cite{berg08} pg. 206}. Then, We can walk the edges of $\mathcal{DT}(S)$ in $O(n)$ time, and check each if the circle with just that edge, $\overline{p_i p_j}$, as the diameter contains an interior point or not. Since this was an edge in the $\mathcal{DT}$, there is only one potential point that could be interior, the third point in the triangle; so we only need to check if the neighbors of $p_i, p_j$ are interior to $C_{ij}$; assuming general position, there is a constant number of neighbors to check, 2 for each point. If it has interior points, then discard that edge; otherwise, it is an edge in $\mathcal{GG}(S)$. The total runtime is $O(n\log n)$ due to computing the $\mathcal{DT}(S)$, which is optimal and faster than checking every pair of points with every other point for being interior, which would come out to be $O(n^3)$ time.
+
+        \begin{figure}[h]
+            \begin{tabular}{cc}
+                \begin{subfigure}{0.5\textwidth}
+                    \centering
+                    \includegraphics[width=0.7\textwidth]{images/1b.PNG}
+                    \caption{$\overline{p_i p_j}\in \mathcal{GG}(S)$, $\overline{p_i p_j}\in \mathcal{DT}(S)$}
+                    \label{fig.1b}
+                \end{subfigure} & 
+                \begin{subfigure}{0.5\textwidth}
+                    \centering
+                    \includegraphics[width=0.7\textwidth]{images/1c.PNG}
+                    \caption{$\overline{p_i p_j}\notin \mathcal{GG}(S)$, $\overline{p_i p_j}\notin \mathcal{DT}(S)$}
+                    \label{fig.1c}
+                \end{subfigure}  \\ 
+                & \\ 
+                \begin{subfigure}{0.5\textwidth}
+                    \centering
+                    \includegraphics[width=0.7\textwidth]{images/1a.PNG}
+                    \caption{$\overline{p_i p_j}\notin \mathcal{GG}(S)$, $\overline{p_i p_j}\in \mathcal{DT}(S)$}
+                    \label{fig.1a}
+                \end{subfigure} &
+                \begin{subfigure}{0.5\textwidth}
+                    \centering
+                    \includegraphics[width=0.4\textwidth]{images/1d.PNG}
+                    % \caption{$\overline{p_i p_j}\notin \mathcal{GG}(S)$, $\overline{p_i p_j}\in \mathcal{DT}(S)$}
+                    \label{fig.1d}
+                \end{subfigure}
+            \end{tabular}
+            % \caption{When $|x_i - x_j| = |y_i - y_j|$ (square)}
+            \label{fig.1}
+        \end{figure}
 
         
 
@@ -136,35 +179,40 @@
 
     % Reference: \cite{leewong}, \cite{voronoiinteract}
 
-    I use the the grid layout in MS powerpoint (grid lines don't export) to draw the below diagrams. The Voronoi diagram in the $L_1$ metric is given in solid \textcolor{red}{red} lines; it is made of the bisectors (\textcolor{red}{$B_1$'s}) that separate the regions of two separate points. The Voronoi diagram in the $L_\infty$ metric is given in solid \textcolor{dkgreen}{green} lines; it is made of the bisectors (\textcolor{dkgreen}{$B_\infty$'s}) that separate the regions of two separate points. The regular Voronoi diagram (given in the $L_2$ metric) is given in the thicker dashed \textcolor{blue}{blue} lines (the segment connecting two points is thin-dashed); it is made of the perpendicular bisectors (\textcolor{blue}{$B_2$'s}) that separate the regions of two separate points. \\
+    % I use the the grid layout in MS powerpoint (grid lines don't export) to draw the below diagrams. 
     
-    I start by characterizing the bisectors between two points $q_i(x_i, y_i)$ and $q_j(x_j, y_j)$ in the three different metrices in different general positions using real values for points; $q_i$ will be left of $q_j$, i.e. $x_i < x_j$; everything to one side of a bisector $B_p$ in the $L_p$ metric is closer to one point than it is so the other, because the bisectors are equal distance from either points. $L_1$-distance is $d_1 (q_i, q_j) = |x_i - x_j| + |y_i - y_j|$; $L_\infty$-distance is $d_\infty (q_i, q_j) = \text{max}\Big(|x_i - x_j|,\ |y_i - y_j| \Big) $\footnote{Jake}. Points on the bisectors are found by taking half of the distance. \\
-    
-    In each of the six cases below, notice that $B_2$ is bounded by $B_1$ and $B_\infty$ which have a criss-cross pattern with each other\cite{leewong}. In general, for $1 \leq p \leq \infty$, we can say that $B_p$ is bounded by $B_1$ and $B_\infty$, and that all dividing edges in each metrices intersect at a common point in the rectangle given by $q_i$ and $q_j$. In the case that $q_i$ and $q_j$ form a square region (when $|x_i - x_j| = |y_i - y_j|$), there are two regions in the $L_1$ metric shaded in red in which any point there could be equal distance from $q_i$ and $q_j$; for the diagrams below, I take the bisector in the dark, solid red; likewise for the bisector shown for the $L_\infty$ metric. 
+    \textbf{Figures}: The $L_1$ Voronoi diagram is drawn in solid \textcolor{red}{red} lines; it is made of the bisectors (\textcolor{red}{$B_1$'s}) that separate the regions of two separate points. The $L_\infty$ Voronoi diagram is given in solid \textcolor{dkgreen}{green} lines; it is made of the bisectors (\textcolor{dkgreen}{$B_\infty$'s}) that separate the regions of two separate points. The regular $L_2$ Voronoi diagram is given in the thicker dashed \textcolor{blue}{blue} lines (the segment connecting two points is thin-dashed); it is made of the perpendicular bisectors (\textcolor{blue}{$B_2$'s}) that separate the regions of two separate points. \\
 
-    \begin{figure}[h]
-        \begin{tabular}{cc}
-            \begin{subfigure}{0.5\textwidth}
-                \centering
-                \includegraphics[width=1\textwidth]{images/2e.PNG}
-                \caption{$|x_i - x_j| = |y_i - y_j|$, $y_i < y_j$}
-                \label{fig.2e}
-            \end{subfigure} & 
-            \begin{subfigure}{0.5\textwidth}
-                \centering
-                \includegraphics[width=1\textwidth]{images/2f.PNG}
-                \caption{$|x_i - x_j| = |y_i - y_j|$, $y_i > y_j$}
-                \label{fig.2f}
-            \end{subfigure}
-        \end{tabular}
-        % \caption{When $|x_i - x_j| = |y_i - y_j|$ (square)}
-        \label{fig.2e2f}
-    \end{figure}
+    % \hrule
+
+    
+    \textbf{Distance}: I characterize the bisectors between two points $q_i(x_i, y_i)$ and $q_j(x_j, y_j)$ in $L_1$, $L_2$, and $L_\infty$; $q_i$ will be left of $q_j$ in all the figures, i.e. $x_i < x_j$; everything to one side of a bisector $B_p$ in the $L_p$ metric is closer to one point than it is so the other, because the bisectors are equal distance from either points. $L_1$-distance is $d_1 (q_i, q_j) = |x_i - x_j| + |y_i - y_j|$; $L_\infty$-distance is $d_\infty (q_i, q_j) = \text{max}\Big(|x_i - x_j|,\ |y_i - y_j| \Big) $\footnote{Jake explained how to find this $d_\infty$ with the given norm in the problem.}. Points on the bisectors are found by taking half of the distance. \\
+    
+    \textbf{General Observation}: In each of the eight drawn cases below, notice that $B_2$ is bounded by $B_1$ and $B_\infty$ which have a criss-cross pattern with each other\cite{leewong}. In general, for $1 \leq p \leq \infty$, we can say that $B_p$ is bounded by $B_1$ and $B_\infty$, and that all dividing edges in each metrices intersect at a common point in the rectangle given by $q_i$ and $q_j$. \\
+    
+    \textbf{Square Case}: In the cases that $q_i$ and $q_j$ form a square region (when they are perfectly diagonal and $|x_i - x_j| = |y_i - y_j|$), there are two regions in the $L_1$ metric shaded in red in which any point there could be equal distance from $q_i$ and $q_j$; for the diagrams below, I take the bisector in the dark, solid red; likewise, the bisector shown for the $L_\infty$ metric is also the $L_2$ perpendicular bisector\footnote{Jake clarified this in office hours. Also: \cite{leewong}}. Fig. \ref{fig.2e} and \ref{fig.2f}. \\
+
+    \textbf{Degenerate Cases}:In the cases that $q_i$ and $q_j$ form a vertical segment (when $y_i = y_j$), and when $q_i$ and $q_j$ form a horizontal segment (when $x_i = x_j$), there are two regions in the $L_\infty$ metric shaded in green in which the ppoints there could be equal distance from $q_i$ and $q_j$; for the diagrams below, I take the bisector in the solid green; likewise the bisector shown for the $L_1$ metric is also the $L_2$ perpendicular bisector\footnote{Jake explained how we yield the $B_\infty$.}. Fig. \ref{fig.2g} and \ref{fig.2h}. \\ 
+
+    \textbf{Observation of Overlays}: I show for a set $S$ of 6 specified points in general position the $L_p$ metric Voronoi Diagram, $\mathcal{VD}_p(S)$, for $p = {1, 2, \infty}$ in Fig. \ref{fig.L1plain}, \ref{fig.LINFplain}, and \ref{fig.L2}, respectively. $\mathcal{VD}_1(S)$ and $\mathcal{VD}_\infty(S)$ are overlayed in Fig. \ref{fig.L1LINFplain}, and those overlayed with $\mathcal{VD}_2(S)$ is in Fig. \ref{fig.L1LINFL2arrow}. Like with my general observation above for different cases with two points, I see where different parts of the $\mathcal{VD}_1(S)$ and $\mathcal{VD}_\infty(S)$ for the criss-cross pattern. I predicted that the $\mathcal{VD}_2(S)$ would fall into those bound regions, and the we can see that in the second overlay. I included arrows to ``mid''-points of interest where three edges of each diagram intersect at the midpoint between two points in $S$.
 
     \pagebreak
 
     \begin{figure}[h]
         \begin{tabular}{cc}
+            \begin{subfigure}{0.5\textwidth}
+                \centering
+                \includegraphics[width=0.7\textwidth]{images/2e.PNG}
+                \caption{$|x_i - x_j| = |y_i - y_j|$, $y_i < y_j$}
+                \label{fig.2e}
+            \end{subfigure} & 
+            \begin{subfigure}{0.5\textwidth}
+                \centering
+                \includegraphics[width=0.7\textwidth]{images/2f.PNG}
+                \caption{$|x_i - x_j| = |y_i - y_j|$, $y_i > y_j$}
+                \label{fig.2f}
+            \end{subfigure} \\ 
+            & \\
             \begin{subfigure}{0.5\textwidth}
                 \centering
                 \includegraphics[width=1\textwidth]{images/2a.PNG}
@@ -176,47 +224,58 @@
                 \includegraphics[width=1\textwidth]{images/2b.PNG}
                 \caption{$|y_i - y_j| > |x_i - x_j|$, $y_i > y_j$}
                 \label{fig.2b}
-            \end{subfigure} \\
+            \end{subfigure}
+        \end{tabular}
+        % \caption{When $|x_i - x_j| = |y_i - y_j|$ (square)}
+        \label{fig.2e2f}
+    \end{figure}
+
+    \pagebreak
+
+    \begin{figure}[h]
+        \begin{tabular}{cc}
+            % \begin{subfigure}{0.5\textwidth}
+            %     \centering
+            %     \includegraphics[width=1\textwidth]{images/2a.PNG}
+            %     \caption{$|y_i - y_j| > |x_i - x_j|$, $y_i < y_j$}
+            %     \label{fig.2a}
+            % \end{subfigure} & 
+            % \begin{subfigure}{0.5\textwidth}
+            %     \centering
+            %     \includegraphics[width=1\textwidth]{images/2b.PNG}
+            %     \caption{$|y_i - y_j| > |x_i - x_j|$, $y_i > y_j$}
+            %     \label{fig.2b}
+            % \end{subfigure} \\
             \begin{subfigure}{0.5\textwidth}
                 \centering
-                \includegraphics[width=1\textwidth]{images/2c.PNG}
+                \includegraphics[width=0.8\textwidth]{images/2c.PNG}
                 \caption{$|x_i - x_j| > |y_i - y_j|$, $y_i < y_j$}
                 \label{fig.2c}
             \end{subfigure} & 
             \begin{subfigure}{0.5\textwidth}
                 \centering
-                \includegraphics[width=1\textwidth]{images/2d.PNG}
+                \includegraphics[width=0.8\textwidth]{images/2d.PNG}
                 \caption{$|x_i - x_j| > |y_i - y_j|$, $y_i > y_j$}
                 \label{fig.2d}
+            \end{subfigure} \\ 
+            & \\
+            \begin{subfigure}{0.5\textwidth}
+                \centering
+                \includegraphics[width=0.6\textwidth]{images/2g.PNG}
+                \caption{$|y_i - y_j| < |x_i - x_j|$, $y_i = y_j$}
+                \label{fig.2g}
+            \end{subfigure} & 
+            \begin{subfigure}{0.5\textwidth}
+                \centering
+                \includegraphics[width=0.8\textwidth]{images/2h.PNG}
+                \caption{$|y_i - y_j| > |x_i - x_j|$, $x_i = x_j$}
+                \label{fig.2h}
             \end{subfigure}
         \end{tabular}
         % \caption{When $|y_i - y_j| > |x_i - x_j|$}
         \label{fig.2a2b}
     \end{figure}
 
-    % \pagebreak
-
-    % \begin{figure}[h]
-    %     \begin{tabular}{cc}
-    %         \begin{subfigure}{0.5\textwidth}
-    %             \centering
-    %             \includegraphics[width=1\textwidth]{images/2c.PNG}
-    %             \caption{$y_i < y_j$}
-    %             \label{fig.2c}
-    %         \end{subfigure} & 
-    %         \begin{subfigure}{0.5\textwidth}
-    %             \centering
-    %             \includegraphics[width=1\textwidth]{images/2d.PNG}
-    %             \caption{$y_i > y_j$}
-    %             \label{fig.2d}
-    %         \end{subfigure}
-    %     \end{tabular}
-    %     \caption{When $|x_i - x_j| > |y_i - y_j|$}
-    %     \label{fig.2c2d}
-    % \end{figure} 
-
-
-    
 
     \pagebreak
 
