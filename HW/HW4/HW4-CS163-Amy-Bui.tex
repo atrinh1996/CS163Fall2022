@@ -377,7 +377,9 @@
         \item We assume general position of $S$ and that we've already computed the Voronoi Diagram for $S$, $\mathcal{VD}(S)$, which takes $O(n\log n)$ time, and that the edges, vertices, and faces of $\mathcal{VD}(S)$ are stored in a DCEL. We can do point location on $q$ in $O(\log n)$ time to detect which Voronoi cell it is in. Since this is a Voronoi Diagram, whatever face query point $q$ is in, the Voronoi site, point $p\in S$, to which the current face/cell belongs, will be the closest point to $q$, because $q$ is in a region in which it is closer to $p\in S$ than it is to any other point $r\in S$, $r \neq p$. Therefore, using $q(x_q, y_q)$ and closest point $p(x_p, y_p)$, we can calculate in consant time the largest radius circle $C_q$ can have without including $p$ using the distance formula, $r = \sqrt{|x_q - x_p|^2 + |y_q - y_p|^2} - \epsilon$; finally, we can report the largest circle centered at $q$ for the problem, $C_q = (x - x_q)^2 + (y - y_q)^2 = r^2$. Space complexity is linear because we are storing the diagram in a DCEL. Overall runtime if we don't have to compute the $\mathcal{VD}(S)$ is $O(\log n)$ for one query point in order to do point location. For $m$ query points, the total runtime is $O(m \log n)$.
         
 
-        \item Again, assume general position and that both $\mathcal{CH}(S)$ and $\mathcal{VD}(S)$ are computed (each takes $O(n\log n)$ time), overlayed, and their edges added to the same DCEL. We remove the partial edges $\mathcal{VD}(S)$ that are outside $\mathcal{CH}(S)$, since the path must be contained within the hull; we can walk the edges of the $\mathcal{CH}(S)$ to find the intersection points with edges of $\mathcal{VD}(S)$ and remove those beyond the hull. This takes $O(n\log n)$ time. 
+        \item First, we check if the starting points $p$ and $q$ are at least $k$ distance from any point in $S$ by checking point inclusion in the region of the circle given by radius $k$ and point $p$ and point $q$. If either $p$ or $q$ are $< k$ away from a point in $S$, then report no path is possible. Otherwise, continue.
+        
+        Again, assume general position and that both $\mathcal{CH}(S)$ and $\mathcal{VD}(S)$ are computed (each takes $O(n\log n)$ time), overlayed, and their edges added to the same DCEL. We remove the partial edges $\mathcal{VD}(S)$ that are outside $\mathcal{CH}(S)$, since the path must be contained within the hull; we can walk the edges of the $\mathcal{CH}(S)$ to find the intersection points with edges of $\mathcal{VD}(S)$ and remove those beyond the hull. This takes $O(n\log n)$ time. 
         
         To find a path from $p$ to $q$, the ``safest'' possible path would be some route that is as far from any points in $S$ as possible. This describes the edges of the $\mathcal{VD}(S)$, because points of the edges are halfway between two given sites, and are therefore the furthest possible points from two points in $S$. This does not necessarily mean all edges are ``safe'' to walk, i.e. $> k$ distance from a site\footnote{Diane discussed with us possible ways to find a path that met the k-tolerance condition, including walking on the Voronoi edges and how to tackle it from the Piano Mover's problem perspective.}.
 
@@ -397,6 +399,31 @@
     %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
     \section{Project}
     \label{sec:four}
+
+    Topics that I'd like to do the project on:
+    \begin{itemize}
+        \item Fortune's algorithm for computing the Voronoi Diagram, storing it in a DCEL. 
+            \begin{itemize}
+                \item It is well described in the textbook.
+                \item A sweeping program can look visually active if it runs live and a decreased rate. 
+            \end{itemize}
+        \item Computing the Delaunay triangulation and getting the Gabriel graph from it, from this homework. 
+            \begin{itemize}
+                \item triangulation is described in the textbook 
+                \item from it, I can use  a subgraph finding algorithm to find the gabriel graph.
+            \end{itemize}
+        \item Computing path from $p$ to $q$ that is within $k$ distance from a point in a given set and within the convex hull given by the set (the piano movers-like problem from this homework).
+            \begin{itemize}
+                \item I will use either the elimination method of finding a path described in the homework, 
+                \item or find a way for the points to ``walk'' to each other with the given limitations.
+            \end{itemize}
+    \end{itemize}
+
+    Programming Plan:
+    \begin{itemize}
+        \item I plan to program the project in C and use the CGAL library for visualization.
+        \item A backup in case programming a solution in C takes too long will be to program it in python. 
+    \end{itemize}
 
     
     
