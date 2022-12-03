@@ -159,11 +159,14 @@
         some line more than once.) Do we always have such a vertex during the
         process of sweeping? That is, will the topological sweep get stuck?
 
-        \begin{lemma}
-            \label{lemma.commonendpt}
-            There always exist two consecutive edges of the cut with a common
-            right endpoint, unless we are considering the rightmost cut.
-        \end{lemma}
+        \begin{figure}
+            \center
+            \includegraphics[width=0.7\textwidth]{linecut.png}
+            \caption{Example of a topological line with associated cuts, modified from Edelsbrunner, Guibas (1989), and using their labelling convention. Notice that cut \texttt{c[4]} is on line $l_3$, etc.}
+            \label{figure.linecut} 
+        \end{figure}
+
+        
 
         \newpage
 
@@ -177,6 +180,11 @@
         \end{figure}
 
         % \vspace{3 in}
+        \begin{lemma}
+            \label{lemma.commonendpt}
+            There always exist two consecutive edges of the cut with a common
+            right endpoint, unless we are considering the rightmost cut.
+        \end{lemma}
         \begin{proof}
             Assume that there are vertices still unprocessed but there is no pair
             of cut edges $c_{k}$, $c_{k+1}$ which share a common right endpoint.
@@ -193,29 +201,60 @@
             right endpoint. Contradiction.
 
             Therefore $v_{i} = v_{j}$. And the leftmost right endpoint is always
-            an elementary step.
+            an elementary step, i.e. it is ``ready''.
         \end{proof}
     %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 
+    \pagebreak
     \section{Data Structure} %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
     \label{sec:ds}
 
+    \begin{figure}[h]
+        \center
+        \includegraphics[width=0.6\textwidth]{htuhtloverlayed.png}
+        \caption{The same topological cut in Fig. \ref{figure.linecut}, but with an overlay of the upper (purple) and lower (red) horizon tree, modified from Edelsbrunner, Guibas (1989). The cuts \texttt{c[i]} are ordered according to the article and is just important for how the authors explain the \textbf{I} data structure. \texttt{c[i]} doesn't necessarily belong to line $l_i$ in the figure.}
+        \label{figure.overlay}
+    \end{figure}
+
         \begin{description}
-            \item{\textbf{E\big[1:n\big]}} is the array of line equations. $\text{E}[\ i\ ]=(a_{i}, b_{i})$ if the $i^{th}$ line $l_{i}$ of $\mathscr{A}(H)$ is $y=a_{i}x+b_{i}$.
+            \item{\textbf{E\big[1:n\big]}} is the array of line equations. $\text{E}[\ i\ ]=(a_{i}, b_{i})$ if the $i^{th}$ line $l_{i}$ of $\mathscr{A}(H)$ is $y=a_{i}x+b_{i}$. This is a static data structure, as we sort it by slopes once and don't change it again.
             
-            \item{\textbf{HTU\big[1:n\big]}} is an array representing the upper horizon tree. $\text{HTU}[\ i\ ]$ is a pair $(\lambda_{i}, \rho_{i})$ of indices indicating the lines that delimit the segment of $l_{i}$ in upper horizon tree to the left and to the right, respectively. If this segment is the leftmost on line $l_i$, we set $\lambda_i = -1$; if it is the rightmist $l_i$, we set $\rho_i = 0$.
+            \item{\textbf{HTU\big[1:n\big]}} is an array representing the upper horizon tree. $\text{HTU}[\ i\ ]$ is a pair $(\lambda_{i}, \rho_{i})$ (for ``left'' and ``right'') of indices indicating the lines that delimit the \textbf{segment} of $l_{i}$ in \textbf{upper horizon tree} (purple) to the left and to the right, respectively. If this segment is the leftmost on line $l_i$, we set $\lambda_i = -1$; if it is the rightmist $l_i$, we set $\rho_i = 0$. For example, in Fig. \ref{figure.linecut} and \ref{figure.overlay}, for line $l_3$, its associated cut is \texttt{c[4]} in the picture, it is deliminted by $l_5$ on the left and by $l_4$ on the right; so $\text{HTU}[\ i\ ] = (5, 4)$. 
 
             \item{\textbf{HTL\big[1:n\big]}} represents the lower horizon tree and is defined similarly.
 
-            \item{\textbf{I}} is a set of integers, represented as a stack. If $i$ is in I, then $c_{i}$ and $c_{i+1}$ share a common right endpoint.
+            \item{\textbf{I}} is a set of integers, represented as a stack. If $i$ is in I, then $c_{i}$ and $c_{i+1}$ share a common right endpoint, i.e. it is ``ready''. In Fig. \ref{figure.overlay}, $I = [4, 1]$, because \texttt{c[4]} (and \texttt{c[5]}) and \texttt{c[1]} (and \texttt{c[2]}) are both ``ready''.
+            
             
 
-            \item{\textbf{M\big[1:n\big]}} is an array holding the current sequence of indices that from the lines $m_{1}$, $m_{2}$,  ,  ,  ,  , $m_{n}$ of the cut.
+            \item{\textbf{M\big[1:n\big]}} is an array holding the current sequence of indices that from the lines $m_{1}$, $m_{2}$,  ,  ,  ,  , $m_{n}$ of the cut. In Fig. \ref{figure.overlay}, from top to bottom, $M = [1, 2, 5, 3, 4]$.
             
-            \item{\textbf{N\big[1:n\big]}} is a list of pairs of indices indicating the lines delimiting each edge of the cut.
+            \item{\textbf{N\big[1:n\big]}} is a list of pairs of indices indicating the lines delimiting each edge of the \textbf{cut} at $l_i$. For example, in Fig. \ref{figure.overlay}, the cut on $l_5$ is delimited by $l_3$ and $l_1$, so $N[5] = (3, 1)$.
 
         \end{description}
+
+
+        All the data structures are defined below for current cut of the arragement in Figure \ref{figure.linecut} and \ref{figure.overlay}. \\
+
+
+        \begin{tabular}{rrcrrcrr}
+            E:  & $(a_1, b_1)$ &    & HTU:  & $(-1, 2)$ &  & HTL: & $(-1, 0)$ \\ 
+                & $(a_2, b_2)$ &    &       & $(-1, 5)$ & &       & $(-1, 1)$\\
+                & $(a_3, b_3)$ &    &       & $(5,  4)$ & &       & $(5,  1)$\\
+                & $(a_4, b_4)$ &    &       & $(5,  0)$ & &       & $(5,  3)$\\
+                & $(a_5, b_5)$ &    &       & $(3,  0)$ & &       & $(3,  1)$\\
+            & & & & & & & \\
+            \hline
+            & & & & & & & \\
+            I:  & 4            &    & M:    & 1         &  & N:   & $(-1, 2)$\\
+                & 1            &    &       & 2         &  &      & $(-1, 1)$\\
+                &              &    &       & 5         &  &      & $(5,  4)$\\
+                &              &    &       & 3         &  &      & $(5,  3)$\\
+                &              &    &       & 4         &  &      & $(3,  1)$ \\
+        \end{tabular}
+
+        
 
 
         \pagebreak
@@ -237,68 +276,23 @@
 
         \begin{figure}
             \center
-            \includegraphics[viewport=239 310 369 388]{upperlower_HT.eps}
-            %[height=2in]{upper_HT.eps}
-            %\epsfig{figure=upper_HT.eps,height=3in}
-            \caption{Upper and Lower Horizon Trees}
+            \includegraphics[width=\textwidth]{upperlower.png}
+            \caption{Broad example of Upper and Lower Horizon Trees}
             \label{figure.upperlower}
         \end{figure}
+
+        % \begin{figure}
+        %     \center
+        %     \includegraphics[viewport=239 310 369 388]{upperlower_HT.eps}
+        %     %[height=2in]{upper_HT.eps}
+        %     %\epsfig{figure=upper_HT.eps,height=3in}
+        %     \caption{Upper and Lower Horizon Trees}
+        %     \label{figure.upperlower}
+        % \end{figure}
+
     \newpage
     %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-
-        \section{Example Arrangement and Cut} %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-        \label{sec:example}
-
-        Figure \ref{figure.linecut} contains a modified $\mathscr{A}(H)$ from \cite{edel1989} with a topological line and the associaed cut. Figure \ref{figure.uht} and \ref{figure.lht} are the respective upper and lower horizon trees. \\ 
-
-        The Data structures are defined below for the arragement in Figure \ref{figure.linecut}, \ref{figure.uht}, and \ref{figure.lht}. \\
-
-
-        \begin{tabular}{rrcrrcrr}
-            E:  & $(a_1, b_1)$ &    & HTU:  & $(-1, 2)$ &  & HTL: & $(-1, 0)$ \\ 
-                & $(a_2, b_2)$ &    &       & $(-1, 5)$ & &       & $(-1, 1)$\\
-                & $(a_3, b_3)$ &    &       & $(5,  4)$ & &       & $(5,  1)$\\
-                & $(a_4, b_4)$ &    &       & $(5,  0)$ & &       & $(5,  3)$\\
-                & $(a_5, b_5)$ &    &       & $(3,  0)$ & &       & $(3,  1)$\\
-                & Fig. \ref{figure.linecut} & & & Figure \ref{figure.uht} & & & Figure \ref{figure.lht} \\
-            & & & & & & & \\
-            \hline
-            & & & & & & & \\
-            I:  & 4            &    & M:    & 1         &  & N:   & $(-1, 2)$\\
-                & 1            &    &       & 2         &  &      & $(-1, 1)$\\
-                &              &    &       & 5         &  &      & $(5,  4)$\\
-                &              &    &       & 3         &  &      & $(5,  3)$\\
-                &              &    &       & 4         &  &      & $(3,  1)$ \\
-                & Figure \ref{figure.linecut} & & & Figure \ref{figure.uht}, \ref{figure.lht} & & & Figure \ref{figure.linecut}
-        \end{tabular}
-
-        
-
-        
-        \begin{figure}
-            \center
-            \includegraphics[width=0.7\textwidth]{linecut.png}
-            \caption{topological line with associated cut, modified from Edelsbrunner, Guibas (1989)}
-            \label{figure.linecut} 
-        \end{figure}
-
-        \begin{figure}
-            \center 
-            \includegraphics[width=0.7\textwidth]{uht.png}
-            \caption{upper horizon tree, modified from Edelsbrunner, Guibas (1989)}
-            \label{figure.uht} 
-        \end{figure}
-
-        \begin{figure}
-            \center
-            \includegraphics[width=0.7\textwidth]{lht.png}
-            \caption{lower horizon tree, modified from Edelsbrunner, Guibas (1989)}
-            \label{figure.lht}
-        \end{figure}
-
-        \newpage
-    %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 %\newpage
 %\begin{figure}
@@ -315,29 +309,28 @@
         {\bf Initialization:}
 
         \begin{enumerate}
-            \item  Sort the lines of the arrangement by slope.
+            \item  Sort the lines of the arrangement by slope. This also initializes $E$ and $M$. $O(n\log n)$.
             \item  Find the leftmost and the rightmost intersection point of the
-                lines.
-                Let the two points be $(x_{l},y_{l})$ and $(x_{r},y_{r})$.
+                lines. Let the two points be $(x_{l},y_{l})$ and $(x_{r},y_{r})$. $O(n)$.
             \item Create vertical lines $x = x_{l} - 1 , x = x_{r} + 1 $ as left
-                boundary and right boundary.
-                Determine the intersection points of  lines $l_{1}, , , l_{n}$
-                with the boundaries.
-            \item Create upper horizon tree:\\
+                boundary and right boundary. $O(1)$. Determine the intersection points of  lines $l_{1}, , , l_{n}$ with the boundaries. $O(n)$.
+            \item Create upper horizon tree ($O(n)$):\\
                 Insert $l_{1}, , , l_{n}$ in order to make a ``hammock'': \\
                 Assume $l_{1}, , , l_{k}$ have been inserted. These lines form
                 an {\em upper bay} as shown in figure \ref{figure.init}. To insert
                 $l_{k+1}$, begin at its endpoint on the left boundary. Walk in
                 counter clockwise order around the bay till we find the
                 intersection point of $l_{k+1}$ with an edge.
-            \item Create lower horizon tree similarly by starting the travers at
-                endpoints on the right boundary.
-            \item Initialize N:
-                Let HTU[i] = ( -1, $r$ ) and HTL[i] = ( -1, $s$).  If $l_{r}$
+            \item Create lower horizon tree ($O(n)$) similarly by starting the travers at endpoints on the right boundary.
+            \item Initialize N ($O(n)$):
+                Let HTU[i] = ( -1, $r$ ] and HTL[i] = ( -1, $s$ ].  If $l_{r}$
                 intersects $l_{i}$ to the left of the intersection point of
                 $l_{s}$ and $l_{i}$ then the right delimiting line of $e_{i}$
                 is r. Otherwise, the right delimiting line of $e_{i}$ is s.
-            \item Initialize I by scanning N.
+
+                USing $l_1$ in Fig. \ref{figure.overlay} as an example, because it is still the same position as it was when the arrangment was initialized, $HTU[1] = (-1, 2)$ and $HTL[1] = (-1, 0)$, where $l_0$ is that imaginary rightmost vertical spreader bar in the picture. Since $l_2$ intersects $l_1$ to the left of where $l_0$ intersects $l_1$, then the right delimiting line is $2$, i.e. $N[1] = (-1, 2)$.
+
+            \item Initialize I by scanning N. $O(n)$.
         \end{enumerate}
 
 
@@ -348,6 +341,8 @@
             \caption{Creating a hammock.}
             \label{figure.init}
         \end{figure}
+
+        \textbf{Runtime Explanation}: 
 
         Step 1 takes $O(n\log n)$ time. Step 2 could be done in linear time
         since the leftmost and rightmost intersection points must be the 
