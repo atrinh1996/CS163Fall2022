@@ -88,29 +88,44 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 \begin{document}
-\doheading{2}{title}{HW 5} 
+\doheading{2}{title}{HW 6} 
 % \htitle{Homework 1}
 % \bigskip 
 % \bigskip 
 %%%%%%%%%% begin text after this line %%%%%%%%%%%%%%
 
+%%
+%% treap, interval, segment trees, range tree
+%% range search
+%%
+
     %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-    \section{Point Location: 2D}
+    \section{Data Structures}
     \label{sec:one}
 
-        \begin{enumerate}[label=\alph*.]
-            \item Translate the points of $S \cup \{q\}$ to the origin, where $q$ is at the origin. For each point $p \in S$, draw vector $\overrightarrow{qp}$. For the set of vectors made about the origin at $q$, if 1) there exists two adjacent vectors that can make an obtuse angle with no other vector bisecting it, then $q$ is outside $\mathcal{CH}(S)$; 2) if two adjacent vectors make $180^{o}$ angle that isn't bisect by another vector, then $q$ is colinear to those two points and all three are on $\mathcal{CH}(S)$; and 3) all pairs of adjacent vectors make acute angles, then $q$ is inside $\mathcal{CH}(S)$. This is done in linear time because we check adjacent vectors. 
+        \begin{enumerate}[label=(\alph*)]
+            \item We can use an segment tree as the primary data structure $\mathcal{T}$ to store horizontal interval segments and their $y$-positions. Using the segment endpoints $x$-coordinates, the primary tree can order the segments by the $x$-ordered intervals. This way, we can query which segments contain query point $q_x$ in $O(\log^2 n + k)$ time, where $k$ is the number of segments containing $q_x$. But we need to narrow the answer to those segments whose $y$-positions are in the range of $[\ell_y, h_y]$. So in addition to the primary data structure, the associated data structure can be a list that contain the $y$-position of a segment; so each node contains the segment it covers and a list of those segments' $y$-positions. Additional segments that the vertical query segment $q$ may pierce can be found by traversing the segment tree as described in the book (p. 234). 
             
-            \item We know $q$ is inside $\mathcal{CH}(S)$. Suppose we presorted $S$ and know the points are ordered by x-coordinates, which itself takes $O(n\log n)$ time. Split the set of $S$ across two half planes divided by the horizontal line going through $q$\footnote{Diane had gone over this method in OH.}. Take the left most and right most point in the upper plane and in the lower plane, and for each of those (at most) four points, make the vector from $q$ to that extreme point. Pick three of those (at most) four points, and at least one of those triples will form a triangle $\Delta xyz$ that contains $q$. Since we have at most $\binom{4}{3}$ triangles to check to check, this takes constant time to check this many point inclusions in a triangle. This works since $q$ is already known to be within the convex hull; since we found (at most) 4 exteme points, these are in $\mathcal{CH}(S)$, and $q$ will be contained in a face made by these vertices.
+            The time to build this augmented tree is the same as the preprocessing time for building a regular segment tree in $O(n\log n)$ time, where $n$ is the number of segments and the depth is $O(\log n)$. I don't think this tree needs another tree as the associated data structure at each node, since we only need the $y$-positions of segments that contain a point with $x$-coord $q_x$. 
+
+            Likewise, storage is $O(n\log n)$ for $n$ segments and a tree of depth $O(\log n)$. The addition of the $y$-position list at each node is only for those nodes that contain a segment interval, and there is only every at most $O(n)$ additional space for the $y$-position for the entire tree, not each not. So the space is $O(n\log n)$, rather than $O(n^2 \log n)$.
             
-            \item We know $q$ is outside $\mathcal{CH}(S)$, so there exists some region ``between'' $q$ and $S$ that is empty and keeps them to opposite sides. We can find a support line of $\mathcal{CH}(S)$ that also keeps $q$ to the opposite side of the line. Similar to part a, for each point $p \in S$, draw line segment $\overline{qp}$. We can find the shortest line segment in $O(n)$ time. Since this $p$ is the ``closest'' to $q$ out of all other points in $S$, itis  some extreme point and so $p\in \mathcal{CH}(S)$. Draw the line perpendicular to this shortest $\overline{qp}$, and that is the support line that keeps $S$ and $q$ on opposite sides. No other points of $S$ would be on the $q$-side of the line, because then such a point would closer to $q$ than the closest point $p$, a contradition; additionally, since $p$ is on the convex hull, this other closest point $p'$ must also be on the convex hull; however, $p'$ existance on the hull and on the $q$ side of the line is a contradiction because it makes the polygon concave, and therefore not a convex hull. 
-         
-            \item Suppose we have calculated the $\mathcal{CH}(S)$, the three tasks can be done as:
-                \begin{enumerate}[label=\textbf{part \alph*}]
-                    \item It takes $O(\log n)$ time to do point inclusion with a convex polygon. 
-                    \item It takes $O(n)$ time to triangulate a convex hull. Supposing we store the triangulation in a DCEL, it can take $O(\log n)$ time to find the face in the DCEL that $q$ belongs, and we report the three points of that triangle face, accessible in constant time.
-                    \item If $\mathcal{CH}(S)$ is in a dynamic data structure, it takes $O(\log n)$ to find a bridge $\overline{qp}$ from $q$ to $\mathcal{CH}(S)$, where $p \in \mathcal{CH}(S)$. If $\overline{qp} \Rightarrow y = mx + b$, the support line that separates $S$ ad $q$ is ``tilted'' $\overline{qp}$, i.e. $y = (m \pm \epsilon_1)x + (b \pm \epsilon_2)$, that includes point $p$. 
-                \end{enumerate}
+            % \begin{itemize}
+            %     \item reduce problem to 1D, where we make an x-axis interval tree, and a y-axis interval tree (When we collapse the dimension.)
+            %     \item Diane/Stephanie suggests segment tree.
+            %     \item Describe the augmented free, and discuss the preprocessing (build), query time, and space complexities
+            %     \item Problem example: multiple horizontal interval segments in $S$. Given a vertical, report the number of interval segments it intersects. With a segment tree, the path down to a leaf will give you the segments the vertical hits. Requires to know the y-coord of the horizintal to remove extra nodes that the vertical doesn't actually cross. Query is $O(\log^2 n)$ (log for the primary tree path, and log for the secondary tree).
+            % \end{itemize}
+            
+            \item As the problem suggests, we can organize the points in an interval that also uses two treaps as the associated data structures. The primary tree $\mathcal{T}$ is built such that nodes are organized by the $x$-values of the points. So we can traverse down the tree until we meet a median $x$ value stored in a node that is contained by the ractangluar query's $x$ interval. Once there, we traverse down each subtree to find the next nodes just within the query's $x$-range (i.e. the leftmost node in the left subtree and the right most node in the right subtree). Each node can have two treaps\footnote{Jake and Diane discussed this augmentation for the primary tree that works to find points in two rectangular intervals} built from the points of the enture subtree of the current node, as a treap can report the points in an open rectangluar query range in $O(\log n + k)$ time (lemma 10.8, page 230) for $k$ solution points; one $S_L$ treap that can report the left closed interval of points the query, and one $S_R$ treap that can report the right closed interval of the query, where the final solution is the points contained in both query sets.
+            
+            The storage for one normal BBST is $O(n)$; each node also stores treaps based on the node's subtrees' point, so with each level deeper into the tree, the associated data structure becomes smaller because the tree is balanced; but the total storage is still $O(n^2)$ because each level of the tree stores a total of $O(n)$ additional space for all associated treap on each level of the primary tree. Likewise, preprocessing would take $O(n^2 \log^2 n)$ time because there are $n$ points for the primary tree of depth $O(\log n)$, and each node's treaps take $O(n\log n)$ to build. Query would take $O({\log n + A})$ where $A$ is the number of solutions in the query range: it takes $O(\log n)$ time to find the median $x$ in the node of the primary tree and the target nodes, and an additional $O({\log n + A})$ for each of the node's two treaps to report the points in the rectangular range. 
+
+            % \begin{itemize}
+            %     \item Do a half open query on SL and SR. With the treap, we can stop when we are done 
+            %     \item Find the height of the tree that matches the query range for your search
+            %     \item (Diane) In a treap, go down to find where you pierce (each $p$ knows where it's median/pierce is), then look in secondary DS. Each node in primary seeps a copy of its SL and SR treap or intervals. Do the  half open interval query on the sub SL and Sub SR
+            % \end{itemize}
             
         \end{enumerate}
         
@@ -118,32 +133,31 @@
     % END %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
     %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-    \section{Point Location: 3D}
+    \section{Boundary of Intersection}
     \label{sec:two}
 
-        \begin{enumerate}[label=\alph*.]
-            \item For each $p \in S$ and $q$, translate the points about the origin, putting $q$ at the origin. Using $q$, create three hyperplanes $H_{q,1}$, $H_{q,2}$, and $H_{q,3}$, that are orthogonal to the $x_1$-, $x_2$-, and $x_3$-axis, respectively. In $O(n)$ time, check if all points are to one side of a hyperplane. If at least one hyperplane keeps points of $S$ to one side, then $q$ is outside the $\mathcal{CH}(S)$; otherwise, $q$ is inside the  $\mathcal{CH}(S)$.  
-            
-            \item We know that $q$ is inside the $\mathcal{CH}_{\text{3D}}(S)$. Sort the points of $S$ in $O(n\log n)$ time, then find the at most 6 extreme points, leftmost and rightmost of each axis. Since these are extreme points, they are on $\mathcal{CH}_{\text{3D}}(S)$. We check at most the $\binom{6}{4}$ sets of four points that make a tetrahedral inside the hull to see if it contains $q$ in $O(\log n)$ time. Report the set of four points that does contain $q$. 
-            
-            \item We know that $q$ is outside the $\mathcal{CH}_{\text{3D}}(S)$. We take $O(n)$ time to find the 3 or 4 shortest $\overline{qp}$, for some $p\in S$. These points together form a face on the convex hull of S that is closest to $q$. A hyperplane made from these points form the support plane that separates $q$ from $S$. 
-            
-            \item Suppose we have calculated the $\mathcal{CH}(S)$, the three tasks can be done:
-            %  in linear time using linear programming as a subroutine\footnote{Diane had gone over this in OH.}:
-            
-            \begin{enumerate}[label=\textbf{part \alph*}]
-                \item Lay the 3D convex hull on the xy-plane, yz-plane, and xz-plane. The result is a triangulation in 2D plane of the 2D hull. We can do the three point inclusion for $q$ in these planes in order to determine if $q$ is in the hull in $O(\log n)$ time. If it is not in the hull in any of the 2D planes, it is not in the 3D hull. 
-                
-                \item Using linear programming we can find the tetrahedron containing $q$ in linear time\footnote{Diane had gone over this in OH.}. Laying the hull on a 2D plane gives the 2D hull and a triangulation. Select the three points of a triangle $q$ is located in and the one point closets to $q$ not on that face, and these four points are the four points of the tetrahedron that contain $q$ in 3D. 
-                
-                \item Using linear programming we can find the hyperplane that separates $q$ and $S$ in linear time\footnotemark[2], by finding the facet of the convex hull of $S$ that is closest to $q$. That facet turned into a plane is the support plane that separates $q$ and $S$.
-            \end{enumerate}
-
-        \end{enumerate}
+    \begin{enumerate}[label=(\alph*)]
+        \item Given two arbitrary simple polygons of $n$ vertices, we can compute the boundary of the intersection with a vertical line sweep. In addition to stopping at each vertec point, we must also stop at each intersection point in the set, so there are $O(n^2)$ stops. At each stop, we update along the sweep line the faces we passed and update how many polygons the current face covers (0, 1, or 2). For those stopping points that change the count from 0 to 2, 2 to 0, 1 to 2, or 2 to 1, add those points to the solution, as they indicate entering/leaving an intersection region of the two polygons. There is $O(\log n)$ work at each stopping point, so the total runtime is $O(n^2 \log n)$\footnote{Jake went over how to determine this method's runtime in OH.}. Storage remains $O(n)$ if the status DS is updated at each pass, removing points allready processed.
+        
+        \item We can solve a similar problem with two recilinear polygons with line sweep, as well, where the stopping points are in a segment tree DS ($O(n\log n)$ space) and we only need to stop and process the intersecting regions at each \emph{vertical} line segment in the data structure, rather than stop at every point and intersection point. There are now only $O(n)$ stops, and we process how many polygons the current face covers and report solution points similar to how we did above: report points that make the count go from 0 to 1, 1 to 2, 2 to 1, and 1 to 0 indicate intersection regions for rectilinear polygons. With $O(\log n)$ time processing at each stop, the total runtime is $O(n\log n)$.
+    \end{enumerate}
         
     % \pagebreak
     % END %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
+    %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+    % \section{Draw}
+    % \label{sec:three}
+
+    % \begin{enumerate}[label=(\alph*)]
+    %     \item 
+        
+    %     \item 
+        
+    % \end{enumerate}
+        
+    % \pagebreak
+    % END %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 
 \begin{thebibliography}{1}

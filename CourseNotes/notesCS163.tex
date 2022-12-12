@@ -256,6 +256,21 @@
                 \hline
                 & Topological Sweep & $\Omega(n^2)$ & $\Theta(n^2)$ & $O(n^2)$ & $O(n)$ \\
                 \hline
+                & --- &  &  &  & \\
+                \hline
+                & Voronoi Diagram & $\Omega()$ & $\Theta()$ & $O()$ & \\
+                \hline
+                & Delaunay Triangulation & $\Omega()$ & $\Theta()$ & $O()$ & \\
+                \hline
+                & 3D Convex Hulls & $\Omega()$ & $\Theta()$ & $O()$ & \\
+                \hline
+                & Range Tree & $\Omega()$ & $\Theta()$ & $O()$ & \\
+                \hline
+                & Interval Tree & $\Omega()$ & $\Theta()$ & $O()$ & \\
+                \hline
+                & Treap & $\Omega()$ & $\Theta()$ & $O()$ & \\
+                \hline
+                & Segment Tree & $\Omega()$ & $\Theta()$ & $O()$ & \\
                 \hline
                 % & Name & $\Omega(n \log n)$ & $\Theta(n \log n)$ & $O(n \log n)$ & \\
                 % \hline
@@ -372,7 +387,138 @@
                 LMSR (naive)            & $O(n^4)$              & $O(n)$ \\ 
                 LMSR (vertical sweep)   & $O(n^2 \log n)$       & $O(n)$ \\ 
                 Build $\mathscr{A}(H)$: hammock  & $O(n^2)$              & $O(n^2)$ \\
-                Topological Sweep       & $O(n^2)$              & $O(n)$ \\
+                Topological Sweep       & $O(n^2)$              & $O(n)$ 
+            \end{tabular}
+            \pagebreak
+
+
+            %%%%%%%%%
+            \item[Voronoi Diagram \& Delauney Triangulation]  
+            \item[] 
+            % \begin{minipage}[h]{0.33\textwidth}
+            %     \begin{itemize}
+            %         \item[--] Fortune's Algorithm/Wavefront Sweep
+            %         \item[--] CircumCenter 
+            %         \item[--]
+            %         \item[--]
+            %     \end{itemize}
+            % \end{minipage}
+            % \begin{minipage}[h]{0.33\textwidth}
+            %     \begin{itemize}
+            %         \item[--] Delauney Triangulation
+            %     \end{itemize}
+            % \end{minipage}
+            % \begin{minipage}[h]{0.33\textwidth}
+            %     \begin{itemize}
+            %         \item[--] 
+            %     \end{itemize}
+            % \end{minipage}
+            
+            \begin{tabular}{lll}
+                Algorithm           & time                      & space \\
+                \hline
+                \hline
+                Fortune's Algorithm (VD) & $O(n \log n)$ & $O(n)$  \\
+                Naive (VD) & $O(n^2 \log n)$ &  \\
+                D\&C (VD) & $O(n \log n)$ &  \\
+                DT & $O(n \log n)$ & $O(n)$\\
+                3D CH & $O(n \log n)$ &  
+            \end{tabular}
+
+
+
+            %%%%%%%%%
+            \item[3D Convex Hull]  
+            \item[] 
+            % \begin{minipage}[h]{0.33\textwidth}
+            %     \begin{itemize}
+            %         \item[--] Preparata \& Hong (D\&C)
+            %         \item[--] Shelling's Algo., $\mathcal{P}$ is \# facets
+            %     \end{itemize}
+            % \end{minipage}
+            % \begin{minipage}[h]{0.33\textwidth}
+            %     \begin{itemize}
+            %         \item[--] Beneath\&Beyond (pyramidal update)
+            %     \end{itemize}
+            % \end{minipage}
+            % \begin{minipage}[h]{0.33\textwidth}
+            %     \begin{itemize}
+            %         \item[--] Gift Wrapping 
+            %     \end{itemize}
+            % \end{minipage}
+            
+            \begin{tabular}{lll}
+                Algorithm           & time                      & space \\
+                \hline
+                \hline
+                D\&C & $O(n \log n)$ &  \\
+                Merge (sleeve) & $O(n)$ &  \\ 
+                Beneath \& Beyond (incremental) & $O(n\log n + n^{\floor*{\frac{d+1}{2}}})$ & \\
+                Gift Wrapping & $O(n^{\floor*{\frac{d+2}{2}}})$ &  \\ 
+                Shelling & $O(n^2 + \mathcal{P} \log n)$ & 
+            \end{tabular}
+
+            %%%%%%%%%
+            \item[Linear Programming]  
+            % \item[] 
+            % \begin{minipage}[h]{0.33\textwidth}
+            %     \begin{itemize}
+            %         \item[--] 
+            %     \end{itemize}
+            % \end{minipage}
+            % \begin{minipage}[h]{0.33\textwidth}
+            %     \begin{itemize}
+            %         \item[--] 
+            %     \end{itemize}
+            % \end{minipage}
+            % \begin{minipage}[h]{0.33\textwidth}
+            %     \begin{itemize}
+            %         \item[--] 
+            %     \end{itemize}
+            % \end{minipage}
+            
+            % \begin{tabular}{lll}
+            %     Algorithm           & time                      & space \\
+            %     \hline
+            %     \hline
+            %      &  &  \\
+            % \end{tabular}
+
+
+            %%%%%%%%%
+            \item[Geometric DS \& Rectilinear Contours]  
+            \item[] 
+            % \begin{minipage}[h]{0.33\textwidth}
+            %     \begin{itemize}
+            %         \item[--] 
+            %     \end{itemize}
+            % \end{minipage}
+            % \begin{minipage}[h]{0.33\textwidth}
+            %     \begin{itemize}
+            %         \item[--] 
+            %     \end{itemize}
+            % \end{minipage}
+            % \begin{minipage}[h]{0.33\textwidth}
+            %     \begin{itemize}
+            %         \item[--] 
+            %     \end{itemize}
+            % \end{minipage}
+            
+            \begin{tabular}{llll}
+                Algorithm           & time/query   & space  & preprocess \\
+                \hline
+                \hline
+                1D Range Tree & $Q(\log n + A)$ & $S(n)$ & $P(n\log n)$ \\
+                2D Range Tree (naive) & $Q(\log n + |S_1| + |S_2|)$ & $S(n)$ & $P(n\log n)$ \\
+                2D Range Tree (better) & $Q(\log^2 n + A)$ & $S(n\log n)$ & $P(n\log n)$ \\
+                d-D Range Tree & $Q(\log^d n + A)$ & $S(n\log^{d-1} n)$ & $P(n\log^{d-1} n)$ \\
+                Interval Tree & $Q(\log n + A)$ & $S(n)$ & $P(n\log n)$ \\
+                1D Segment Tree & $Q(\log n + A)$ & $S(n\log n)$ & $P(n\log n)$ \\
+                2D Segment Tree & $Q(\log^2 n + A)$ & $S(n\log^2 n)$ & $P(n\log^2 n)$ \\
+                Treap & $Q(\log n + A)$ & $S(n)$ & $P(n\log n)$ \\
+                Lipski-Preparata & $O(n\log n + p \log \frac{n^2}{p})$ & $O(n + p)$ &  \\
+                Wood & $O(n\log n + p)$ & $O(n + p)$ &  \\
+                Guting & $O(n\log n + p)$ & $O(n\log n + p)$  &  \\
             \end{tabular}
 
         \end{description}
@@ -1121,11 +1267,282 @@
     \end{figure}
 
     \begin{itemize}
-        \item Vor($P$) can be computed in $\Omega(n\log n)/O(n \log n)$ time using Fortune's algorithm, using a plane sweep algorithm that uses a horozontal line. 
+        \item Vor($P$) can be computed in $\Omega(n\log n)/O(n \log n)$ time using Fortune's algorithm using $O(n)$ storage, using a plane sweep algorithm that uses a horozontal line and craetes a beach line / wavefront. We use the idea of parabolas, focus, and directrix. 
+        % \begin{figure}[h]
+        %     \centering
+        %     \includegraphics[width=0.3\textwidth]{images/voronoi4.png}
+        % \end{figure}
+
+        \begin{figure}[h]
+            \begin{tabular}{cc}
+                \begin{subfigure}{0.5\linewidth}
+                    \centering
+                    \includegraphics[width=0.5\textwidth]{images/voronoi4.png}
+                \end{subfigure} &
+                \begin{subfigure}{0.5\linewidth}
+                    \centering
+                    \includegraphics[width=0.5\textwidth]{images/voronoi5.png}
+                \end{subfigure}
+            \end{tabular}
+        \end{figure}
+        \pagebreak
+        
+        \item Naive algorithm would be to find one voronoi region at a time: 1) Find the half plane for each point using the perpendicular bisector, 2) it is $O(n\log n)$ time for each half plane. Total time for all regions is $O(n^2 \log n)$. 
+        \item Given a Voronoi map, we can take the convex hull of the map. All points of the map that are on the hull are part of an infinite voronoi region (i.e. unbounded). So bounded regions are for points inside the hull. 
+            \begin{itemize}
+                \item D\&C method of finding VD with CH:
+                \item Suppose the L and R VD are done and the points are presorted. We do the D\&C CH algo ($O(n \log n)$) and the D\&C VD algo at the same time. 
+                \item The time to stitch the two VD together is $O(n)$.
+                \item $T(n) = 2 T(\frac{n}{2}) + O(n) = O(n\log n)$
+            \end{itemize}
+
+        \item Empty Circle property: at a voronoi vertex, there should be no other voronoi site inside the circle given by the vertex (i.e. the circumcenter). All the Voronoi sites on the circumference of the circle are equidistance from this center. For general position, we say that no more than 3 points are circumcircular to this center.
+        \begin{figure}[h]
+            \begin{tabular}{cc}
+                \begin{subfigure}{0.5\linewidth}
+                    \centering
+                    \includegraphics[width=0.5\textwidth]{images/voronoi6.png}
+                \end{subfigure} &
+                \begin{subfigure}{0.5\linewidth}
+                    \centering
+                    \includegraphics[width=0.5\textwidth]{images/voronoi7.png}
+                \end{subfigure}
+            \end{tabular}
+        \end{figure}
+
+
+
     \end{itemize}
 
 
     \pagebreak
+    %%%%%%%%%%%%%%%%%%%%%%%
+
+
+    \section{Delauney Triangulation}%%%%%%%%%%%%%%%%%%%%%%%
+    \label{sec:delauney}
+    
+        \begin{itemize}
+            \item The $\mathcal{DT}(P)$ is the dual of the $\mathcal{VD}(P)$. In a DT, two voronoi sites are connected by an arc iff their two regions are bounded by a common voronoi edge. 
+            \item Each triange of the DT is made from the 3 points of each VD's circmcenter.
+            \begin{figure}[h]
+                \begin{tabular}{cc}
+                    \begin{subfigure}{0.5\linewidth}
+                        \centering
+                        \includegraphics[width=0.5\textwidth]{images/dt1.png}
+                    \end{subfigure} &
+                    \begin{subfigure}{0.5\linewidth}
+                        \centering
+                        \includegraphics[width=0.5\textwidth]{images/dt2.png}
+                    \end{subfigure}
+                \end{tabular}
+            \end{figure}
+
+            \item the $\mathcal{DT}(P)$ is can be computed in $O(n\log n)$ time with $O(n)$ storage.
+            \item Two edges of the DT intersect in their interiors. 
+            \item For all triangles of a DT, the circumcircle for the triangle must be empty in its interior. That is, no voronoi sites will lie inside the circumcircle for the triangle.
+            \item If we translate the edges of the 3D convex hull into 2D, we are given the DT of $P$ in 2D.
+
+        \end{itemize}
+
+    %%%%%%%%%%%%%%%%%%%%%%%
+
+
+    \section{3D Convex Hull}%%%%%%%%%%%%%%%%%%%%%%%
+    \label{sec:3dconvexhull}
+
+    \begin{itemize}
+        \item the complexity of a 3D CH of $n$ points is $O(n)$.
+        \item It can be computed in $O(n \log n)$ time.
+        \item Preparata \& Hong, D\&C Algo. for 3D CH: 
+            \begin{itemize}
+                \item Given a set $S$ if $n$ points in $\mathbb{R}^3$, presort them with respects to $x_1$-axis, and $P$ is the presorted set. Do \textsf{ConvexHull$(P, n)$}:
+                \item If $n < 7$, compute the $\mathcal{CH}(P)$ by brute force.  
+                \item Else: 
+                    \begin{itemize}
+                        \item Divide: $k = \floor*{\frac{n}{2}}$, $P_L = {p_1, ..., p_k}$, $P_R = {p_{k+1}, ..., p_n}$
+                        \item Recurse: \textsf{ConvexHull$(P_L, k)$}, \textsf{ConvexHull$(P_R, n-k)$}
+                        \item Merge: $\mathcal{CH}(P) = $ \textsf{Merge$(\mathcal{CH}(P_L), \mathcal{CH}(P_R))$}
+                    \end{itemize}
+                \item The whole merge (i.e. finding the sleeve) takes $O(n)$ time. Recurrence is $T(n) = 2 T(\frac{n}{2}) + O(n) = O(n\log n)$
+            \end{itemize}
+        \item 
+    \end{itemize}
+
+
+    \begin{figure}[h]
+        \centering
+        \includegraphics[width=0.3\textwidth]{images/3d1.png}
+    \end{figure}
+
+    \begin{figure}[h]
+        \centering
+        \includegraphics[width=0.5\textwidth]{images/3d2.png}
+    \end{figure}
+
+    \begin{figure}[h]
+        \centering
+        \includegraphics[width=0.7\textwidth]{images/3d3.png}
+    \end{figure}
+
+
+
+    %%%%%%%%%%%%%%%%%%%%%%%
+
+
+
+    \section{Linear Programming}%%%%%%%%%%%%%%%%%%%%%%%
+    \label{sec:linearprog}
+
+    %%%%%%%%%%%%%%%%%%%%%%%
+
+
+    \section{Range Search}%%%%%%%%%%%%%%%%%%%%%%%
+    \label{sec:range}
+
+        \subsection{1D Range Search} %%%%
+            \begin{itemize}
+                \item Problem: Given a set $S \subset \mathbb{R}$ of $n$ points and a query interval $I = [\ell, h]$, find $S\cap I = \{x\in S ~|~ \ell \leq x \leq h\}$.
+                \item DS: 1D Range Tree - Balanced Binary Search Tree that also has all the elements stored in the in the leaves, and the leaves are connected like a linked list. 
+                \item Algorithm: Search the tree for the leaf closes to $\ell$ and report the leaves to the right up to and including $h$.
+                \item $P(n\log n)$
+                \item $Q(\log n + A)$, $A$ is size of solution set 
+                \item $S(n)$
+            \end{itemize}
+
+        %%%%%%%%%%%%%%%%%%%%%%%%%%
+
+        \subsection{2D Range Search} %%%%
+            \begin{itemize}
+                \item Problem: Given a set $S \subset \mathbb{R}^2$ of $n$ points and a query rectangle $R = [\ell_1, h_1] \times [\ell_2, h_2]$, find $S\cap R - \{ (x,y) \in S ~|~ \ell_1 \leq x \leq \ell_2, h_1 \leq y \leq h_2\}$.
+                \item Naive: Use a 1D range tree for the x-coord and a 1D range tree for the y-coord. Find points on the vertical range and horizontal range, and take the intersection of the two as the solution. 
+                    \begin{itemize}
+                        \item $P(n\log n)$
+                        \item $Q(\log n + |S_1| +|S_2|)$
+                        \item $S(n)$
+                    \end{itemize}
+
+                \item Wasteful: For all possible $\binom{n+1}{2}$ possible vertical strip, make a 1D range tree for the points in that strip; do the 1D query rectangle on the widest strip. 
+                    \begin{itemize}
+                        \item $P(n^3)$
+                        \item $Q(\log n + A)$
+                        \item $S(n^3)$
+                    \end{itemize}
+                
+                \item Better: Let $T$ be the BBST for $S$ ordered by the $x_1$-coord. Each node $v \in T$, $v$ has a range tree (the associated structure) for $S_v$ ($S_v \subset S$, $S_v$ is the canonical subset of node $v$) ordered by the $x_2$-coord. I.E. At node $v$, you will get points of a particular $x_1$-range. That node contains a 1D range tree of those points but ordered by their $x_2$-coord.
+                    \begin{itemize}
+                        \item $P(n\log n)$
+                        \item $Q(\log^2 n + A)$
+                        \item $S(n\log n )$
+                    \end{itemize}
+
+            \end{itemize}
+
+        %%%%%%%%%%%%%%%%%%%%%%%%%%
+
+        \subsection{d-Dimension Range Search} %%%%
+        Similar to the 2D range search problems: Given a set $S \subset \mathbb{R}^d$ of $n$ points and a query rectangle $R = \ell_1 \times \ell_2 \times ... \times \ell_d$, find $S\cap R$. We use a BBST on the $x_1$-coord. $\forall v \in T$, we make an associated secondary $(d-1)$ range tree on the $[x_2, ..., x_d]$ coord.
+            \begin{itemize}
+                \item $P(n\log^{d-1} n)$
+                \item $Q(\log^d n + A)$
+                \item $S(n\log^{d-1} n )$
+            \end{itemize}
+
+        %%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+    %%%%%%%%%%%%%%%%%%%%%%%
+
+
+    \section{Geometric Data Structures}%%%%%%%%%%%%%%%%%%%%%%%
+    \label{sec:geods}
+
+        \subsection{Interval Tree} %%%%
+            \begin{itemize}
+                \item Problem: Given a set $S$ of $n$ interval segments, and a query point $q_x$, determine the segments $i\in S$ that contain $q_x$, i.e. report all segments $i \in S$ that intersect the vertical $x = q_x$.
+                \item Algorithm: Using the endpoints of the segments in $S$, so there are $2n$ endpoints. Find the median value $m$, and partition $S$ into subsets $S_L$, $S_C$, and $S_R$. $S_L$ and $S_R$ contain segments exclusively to the left or right of the median. $S_C$ contain those segments that are cut by the median. The node for $m$ will contain: one sorted list for the left endpoints of $S_C$, one sorted list for the right endpoints of $S_C$, and its children (left and right subtrees) are recursively defined by $S_L$ and $S_R$. To answer the query, use the median stored at each node as the key. At each node, search the list for segments that contain the target, using the information about the endpoints to know when you have finished traversing down the tree. 
+            
+                \begin{itemize}
+                    \item $P(n\log n)$
+                    \item Median finding is $O(n)$
+                    \item $Q(\log n + A)$
+                    \item $S(n)$
+                \end{itemize}
+            
+            \end{itemize}
+
+        %%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+        \subsection{1D Segment Tree} %%%%
+            \begin{itemize}
+                \item Given a set $S$ of $n$ interval segments, and a query point $q_x \in \mathbb{R}$, determine the segments $s\in S$ that contain $q_x$, i.e. report all segments $\{s \in S ~|~ q_x \in s\}$ that intersect the vertical $x = q_x$.
+                \item The $n$ segments have $2n$ endpoints that break the number line into $2n + 1$ atomic intervals. Build a binary tree such that the leaves are atomic intervals. Label each node $v$ by a subset $T$ of $S$ such that: $s$ is in $T$ if it contains the entire interval of $v$, and $s$ does not contain the enitre of its sibling $v'$. A segment can be associated with at most two nodes per level.  
+            
+                \begin{itemize}
+                    \item $P(n\log n)$
+                    \item $Q(\log n + A)$
+                    \item $S(n\log n)$, $n$ segments appear in $O(\log n)$ nodes. 
+                \end{itemize}
+            
+            \end{itemize}
+
+        %%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+        \subsection{2D Segment Tree} %%%%
+            \begin{itemize}
+                \item It is a 1D segment tree on the $x$ intervals, and each node on the tree has a segment tree on the $y$ intervals hanging off of it. For query $(x,y)$, locate $x$ on the primary tree, and $y$ on the secondary tree. Report the rectangles encountered on the path on the secondary tree 
+            
+                \begin{itemize}
+                    \item $P(n\log^2 n)$
+                    \item $Q(\log^2 n + A)$
+                    \item $S(n\log^2 n)$
+                \end{itemize}
+            
+            \end{itemize}
+
+        %%%%%%%%%%%%%%%%%%%%%%%%%%
+
+        \subsection{Priority Search Trees: Treaps} %%%%
+            \begin{itemize}
+                \item Solves 2D range queries when the queries are unbounded rectangles. Ex: $[x_0, x_1] \times [y_0, \infty]$
+                \item Find a point of $y$-max-coord $p \in S$ and remove it from the set. Let that be the root of the current tree. 
+                \item Find the median point $m$ of x-coords. of the remaining points. 
+                \item Divide $S$ into $S_L$ and $S_R$. 
+                \item Create the vertex/node $v$ for $p$ and $m$. Let its children be treaps for $S_L$ and $S_R$.
+                \item Query: 
+                \item locate the two leaves that follow $x_0$ and precedes $x_1$. For each node on the path, check if the node's $p$ is in the query range. Search all subtrees between the two paths. Report all points with y-coord at least $y_0$. By the heap property, we can stop searching a path when we hit a point with a $y$-coord less than $y_0$. 
+            
+                \begin{itemize}
+                    \item $P(n\log n)$
+                    \item $Q(\log n + A)$
+                    \item $S(n)$
+                \end{itemize}
+            
+            \end{itemize}
+
+        %%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+    %%%%%%%%%%%%%%%%%%%%%%%
+
+
+    \section{Rectilinear Computaion Geometry}%%%%%%%%%%%%%%%%%%%%%%%
+    \label{sec:linearprog}
+
+    \begin{center}
+        \begin{tabular}{lll p{5cm}}
+            Algo. & Time & Space & Notes \\ 
+            \hline 
+            Lipski-Preparata (PS) & $O(n\log n + p \log \frac{n^2}{p})$ & $O(n + p)$ & Determine vertical edges. Order left-right. \\
+            Wood (PS) & $O(n\log n + p)$ & $O(n + p)$ & Determine horizontal edges. Order left-right.\\ 
+            Guting (D\&C) & $O(n\log n + p)$ & $O(n\log n + p)$ & Determine horizontal edges. Order left-right.
+        \end{tabular}
+    \end{center}
+
+    $p$ is the output size.
+
     %%%%%%%%%%%%%%%%%%%%%%%
     
     % END %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
